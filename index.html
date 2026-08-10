@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frontier AI Lineage Network</title>
+<style>
+  :root{
+    --bg:#10151d; --panel:#161d27; --line:#26303d; --ink:#dce4ee; --dim:#8a97a8;
+    --personnel:#f2b134; --institutional:#7f8ea3; --capital:#4fc98f; --infra:#5aa7e8;
+    --knowledge:#c77dde; --academic:#e8735a; --derived:#f2b134;
+    --person:#f5d67b; --lab:#9cc4ff; --parent:#7f8ea3; --uni:#f0917a; --funder:#7de0b1; --compute:#8fd0ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font:14px/1.5 "Avenir Next","Segoe UI",system-ui,sans-serif;overflow:hidden}
+  #app{display:flex;height:100%;width:100%}
+  #graph{flex:1;position:relative}
+  svg{width:100%;height:100%;display:block;cursor:grab}
+  svg:active{cursor:grabbing}
+
+  header{position:absolute;top:0;left:0;right:0;padding:14px 18px;pointer-events:none;z-index:5}
+  header h1{font-size:17px;font-weight:600;letter-spacing:.04em}
+  header p{color:var(--dim);font-size:12px;margin-top:2px}
+
+  #controls{position:absolute;left:14px;bottom:14px;z-index:6;background:rgba(22,29,39,.94);
+    border:1px solid var(--line);border-radius:10px;padding:12px 14px;max-width:250px}
+  #controls h2{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:8px 0 5px}
+  #controls h2:first-child{margin-top:0}
+  .tog{display:flex;align-items:center;gap:7px;padding:2px 0;cursor:pointer;user-select:none;font-size:12.5px}
+  .tog input{accent-color:#fff;cursor:pointer}
+  .swatch{width:16px;height:3px;border-radius:2px;flex:none}
+  .swatch.dash{background:repeating-linear-gradient(90deg,currentColor 0 4px,transparent 4px 7px)}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .modes{display:flex;gap:6px;margin-top:9px}
+  .modes button{flex:1;background:transparent;border:1px solid var(--line);color:var(--dim);
+    border-radius:6px;padding:4px 0;font-size:11.5px;cursor:pointer}
+  .modes button.on{color:var(--ink);border-color:var(--ink)}
+
+  #panel{width:290px;background:var(--panel);border-left:1px solid var(--line);
+    padding:20px 18px;overflow-y:auto;text-align:right} /* right-aligned reading panel */
+  #panel .eyebrow{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+  #panel h2{font-size:18px;margin:4px 0 2px;font-weight:600}
+  #panel .meta{color:var(--dim);font-size:12px;margin-bottom:12px}
+  #panel .empty{color:var(--dim);font-size:12.5px;margin-top:10px}
+  .edgeitem{border-top:1px solid var(--line);padding:9px 0;font-size:12.5px}
+  .edgeitem .rt{font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+  .edgeitem .who{color:var(--ink)}
+  .edgeitem .d{color:var(--dim);font-size:11.5px;margin-top:2px}
+  .flag{display:inline-block;font-size:10px;border:1px solid var(--line);border-radius:4px;
+    padding:0 5px;color:var(--dim);margin-left:5px;vertical-align:1px}
+
+  #tip{position:absolute;pointer-events:none;background:rgba(16,21,29,.95);border:1px solid var(--line);
+    border-radius:7px;padding:7px 10px;font-size:12px;max-width:260px;z-index:9;display:none}
+  #err{position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:30px;color:var(--dim)}
+  text.lbl{fill:var(--ink);font-size:10.5px;paint-order:stroke;stroke:var(--bg);stroke-width:3px;pointer-events:none}
+  @media (max-width:760px){ #panel{display:none} #controls{max-width:200px} }
+
+  /* --- dashboard tabs --- */
+  #tabs{display:flex;gap:2px;background:var(--panel);border-bottom:1px solid var(--line);
+    padding:0 10px;overflow-x:auto;height:46px;flex:none}
+  #tabs button{background:none;border:none;color:var(--dim);font:12.5px/1 inherit;
+    letter-spacing:.08em;text-transform:uppercase;padding:0 16px;cursor:pointer;
+    border-bottom:2px solid transparent;white-space:nowrap}
+  #tabs button.on{color:var(--ink);border-bottom-color:var(--personnel)}
+  #shell{display:flex;flex-direction:column;height:100vh}
+  .pane{display:none;flex:1;min-height:0;position:relative}
+  .pane.on{display:flex}
+  .pane.scroll{overflow-y:auto;flex-direction:column}
+  .viewpad{padding:22px 26px;max-width:1100px;margin:0 auto;width:100%}
+  .viewpad h2{font-size:15px;letter-spacing:.05em;margin-bottom:4px}
+  .viewpad .sub{color:var(--dim);font-size:12px;margin-bottom:16px}
+  .cellinfo{border-top:1px solid var(--line);margin-top:14px;padding-top:10px;font-size:12.5px}
+  .cellinfo .d{color:var(--dim)}
+  .legendrow{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 4px;font-size:11.5px;color:var(--dim)}
+  .legendrow span{display:flex;align-items:center;gap:5px}
+  .pchip{display:inline-block;border:1px solid var(--line);border-radius:12px;padding:2px 9px;
+    margin:2px 3px 2px 0;font-size:11.5px;cursor:pointer;color:var(--dim)}
+  .pchip.on{color:var(--ink);border-color:var(--ink)}
+  text.axis{fill:var(--dim);font-size:10.5px}
+  text.lane{fill:var(--ink);font-size:11px}
+</style>
+</head>
+<body>
+<div id="shell">
+<nav id="tabs">
+  <button class="on" data-p="pane-net">Network</button>
+  <button data-p="pane-time">Timeline</button>
+  <button data-p="pane-heat">Heatmap</button>
+  <button data-p="pane-rank">Rankings</button>
+  <button data-p="pane-conc">Concentration</button>
+</nav>
+<div class="pane on" id="pane-net">
+<div id="app">
+  <div id="graph">
+    <header>
+      <h1>FRONTIER AI LINEAGE NETWORK</h1>
+      <p>Graph-Ready v1.1 · people · methods · models · money · machines</p>
+    </header>
+    <svg id="svg"></svg>
+    <div id="controls">
+      <h2>Channels</h2>
+      <div id="edgeTogs"></div>
+      <h2>Entities</h2>
+      <div id="nodeTogs"></div>
+      <h2>Layout</h2>
+      <div class="modes">
+        <button id="mForce" class="on">Force</button>
+        <button id="mRadial">Radial</button>
+      </div>
+    </div>
+    <div id="err"><div>Couldn't load <b>data/nodes.csv</b> / <b>data/edges.csv</b>.<br>
+      Serve this folder over HTTP (GitHub Pages, or locally: <code>python3 -m http.server</code>) —
+      browsers block CSV loading from file:// pages.</div></div>
+    <div id="tip"></div>
+  </div>
+  <aside id="panel">
+    <div class="eyebrow">Selected node</div>
+    <h2 id="pName">—</h2>
+    <div class="meta" id="pMeta">Click any node to trace its relationships.</div>
+    <div id="pEdges" class="empty">Every line in this graph is a sourced claim; dashed lines are derived
+      (founder lineage) or reported-only evidence.</div>
+  </aside>
+</div>
+</div>
+<div class="pane scroll" id="pane-time"><div class="viewpad" style="max-width:none">
+  <h2>TIMELINE BRAID</h2>
+  <div class="sub">Institution lifelines by lineage group; colored threads are people moving between them. Click a name chip to isolate a career; click again to release.</div>
+  <div id="pchips"></div><div id="timewrap"></div>
+</div></div>
+<div class="pane scroll" id="pane-heat"><div class="viewpad">
+  <h2>MIGRATION HEATMAP</h2>
+  <div class="sub">Edge activity by start year and channel. Click a cell to list its sourced claims.</div>
+  <div id="heatwrap"></div><div id="heatinfo" class="cellinfo" style="display:none"></div>
+</div></div>
+<div class="pane scroll" id="pane-rank"><div class="viewpad">
+  <h2>TALENT EXPORT / IMPORT</h2>
+  <div class="sub">Outgoing vs incoming migration and founder-lineage edges per institution. Counts use recorded weights where numeric, otherwise 1; derived lineage edges count once.</div>
+  <div id="rankwrap"></div>
+</div></div>
+<div class="pane scroll" id="pane-conc"><div class="viewpad">
+  <h2>CAPITAL &amp; COMPUTE CONCENTRATION</h2>
+  <div class="sub">Who funds and powers whom. Emphasized pairs are dual-role: the same group is both investor and compute provider to the same lab — the lock-in signal.</div>
+  <div id="concwrap"></div><div id="dualwrap" class="cellinfo"></div>
+</div></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script id="embedded-data" type="application/json">{"nodes": "node_id,canonical_name,alternate_names,entity_type,country,city,start_date,end_date,date_precision,active_status,parent_node,original_node_id,inclusion_class,confidence,source_ids,notes\nG_N001,DeepMind,DeepMind Technologies,lab,UK,London,2010-09,,month,historical (acquired/merged),G_N021,N001,CORE,confirmed,[web:4][web:35][web:36][web:8],Remains distinct historical node; later became part of Google DeepMind\nG_N002,Google Brain,,lab,US,Mountain View,2011,,year,historical (merged),G_N021,N002,CORE,confirmed,[web:4][web:100][web:102][web:103],Started at X; distinct until 2023 merger\nG_N003,Google DeepMind,,lab,UK/US,London / Mountain View,2023-04-20,,exact,active,G_N021,N003,CORE,confirmed,[web:4][web:3][web:106],Post-merger entity\nG_N004,OpenAI,,lab,US,San Francisco,2015-12,,month,active,,N004,CORE,confirmed,[web:42][web:40][web:7],Nonprofit origin; later structure changes tracked via events\nG_N005,Anthropic,,lab,US,San Francisco,2021,,year,active,,N005,CORE,confirmed,[web:50][web:52][web:54],\nG_N006,Meta FAIR,Facebook AI Research; Meta AI; FAIR,lab,US,Menlo Park / New York,2013-12,,month,active,G_N022,N006,CORE,confirmed,[web:90][web:91][web:99],\nG_N007,xAI,,lab,US,Palo Alto area,2023-03-09,,exact,active,,N007,CORE,confirmed,[web:60][web:63][web:64],Incorporation date; announcement later\nG_N008,Safe Superintelligence,SSI,lab,US,Palo Alto / Tel Aviv,2024-06-19,,exact,active,,N008,CORE,confirmed,[web:120][web:27][web:71],\nG_N009,Thinking Machines Lab,,lab,US,San Francisco,2025-02,,month,active,,N009,CORE,confirmed,[web:110][web:111][web:118],\nG_N010,DeepSeek,,lab,China,Hangzhou,2023-05,,month,active,,N010,CORE,confirmed,[web:80][web:15][web:85],\nG_N011,Zhipu AI,Z.ai; ChatGLM,lab,China,Beijing,2019,,year,active,,N011,CORE,confirmed,[web:16][web:17],\nG_N012,Moonshot AI,,lab,China,Beijing,2023,,year,active,,N012,CORE,confirmed,[web:16][web:17],\nG_N013,MiniMax,,lab,China,Shanghai,2021,,year,active,,N013,CORE,confirmed,[web:18][web:23],\nG_N014,Baichuan AI,,lab,China,Beijing,2023,,year,active,,N014,CORE,strongly supported,[web:17],Pivoted elements noted in Phase I\nG_N015,01.AI,,lab,China,Beijing,2023,,year,active,,N015,CORE,confirmed,[web:17][web:22],\nG_N016,StepFun,Stepfun,lab,China,,2023-04,,month,active,,N016,CORE,strongly supported,[web:17],\nG_N017,University of Toronto,Hinton group / Toronto,university,Canada,Toronto,,,unknown,active,,N017,CORE,confirmed,[web:70][web:13],Academic seed node\nG_N018,Tsinghua University,,university,China,Beijing,,,unknown,active,,N018,CORE,confirmed,[web:16],\nG_N019,Microsoft,,company,US,Redmond,,,unknown,active,,N019,STRUCTURAL_SUPPORT,confirmed,[web:130][web:131],Capital + cloud\nG_N020,NVIDIA,,compute_provider,US,Santa Clara,,,unknown,active,,N020,STRUCTURAL_SUPPORT,confirmed,multiple,Dominant chip provider\nG_N021,Alphabet,Google; Alphabet Inc.,parent_company,US,Mountain View,,,unknown,active,,N021,STRUCTURAL_SUPPORT,confirmed,,Parent of Brain/DeepMind lineage\nG_N022,Meta Platforms,Facebook; Meta,parent_company,US,Menlo Park,,,unknown,active,,N022,STRUCTURAL_SUPPORT,confirmed,,\nG_N023,High-Flyer,Huanfang; High-Flyer Quant,funder,China,Hangzhou,2015,,year,active,,N023,STRUCTURAL_SUPPORT,confirmed,[web:80],Origin of DeepSeek compute/capital\nG_N024,Ilya Sutskever,,person,US,,,,unknown,active,,N024,CORE,confirmed,[web:70][web:74],High-betweenness bridge; country=professional base (v1.1 repair)\nG_N025,Dario Amodei,,person,US,,,,unknown,active,,N025,CORE,confirmed,[web:51][web:52],country=professional base (v1.1 repair)\nG_N026,Demis Hassabis,,person,UK,,,,unknown,active,,N026,CORE,confirmed,[web:4],country=professional base (v1.1 repair)\nG_N027,Yann LeCun,,person,US,,,,unknown,active,,N027,CORE,confirmed,[web:90],country=professional base (v1.1 repair)\nG_N028,Liang Wenfeng,,person,China,,,,unknown,active,,N028,CORE,confirmed,[web:80],\nG_N029,Mira Murati,,person,US,,,,unknown,active,,N029,CORE,confirmed,[web:111],country=professional base (v1.1 repair)\nG_N030,Elon Musk,,person,US,,,,unknown,active,,N030,CORE,confirmed,[web:40][web:63],country=professional base (v1.1 repair)\nG_N031,Geoffrey Hinton,Geoffrey Everest Hinton,person,Canada/UK,Toronto,1947,,year,active,,,CORE,confirmed,[S015][S016],Deep-learning pioneer; U of T; 2024 Nobel Physics\nG_N032,Noam Shazeer,,person,US,Mountain View,1976,,year,active,,,CORE,confirmed,[S018][S019][S020],Transformer co-author; Character.AI cofounder\nG_N033,John Schulman,,person,US,San Francisco,1987,,year,active,,,CORE,confirmed,[S021][S022],OpenAI cofounder; TRPO/PPO\nG_N034,Mustafa Suleyman,,person,UK,London/Seattle,1984,,year,active,,,CORE,confirmed,[S023][S024][S025],DeepMind + Inflection cofounder; Microsoft AI CEO\nG_N035,Kai-Fu Lee,Li Kaifu,person,Taiwan/US,Beijing,1961-12-03,,exact,active,,,CORE,confirmed,[S026][S027],Founded MSRA; Google China; Sinovation; 01.AI\nG_N036,Alexandr Wang,,person,US,San Francisco,1997,,year,active,,,CORE,confirmed,[S028][S029],Scale AI founder; Meta Chief AI Officer\nG_N037,Yang Zhilin,Zhilin Yang,person,China,Beijing,1992,,year,active,,,CORE,confirmed,[S030][S031],Moonshot founder; XLNet/Transformer-XL\nG_N038,Jan Leike,,person,Germany,San Francisco,1986,,approximate,active,,,CORE,confirmed,[S032],OpenAI Superalignment co-lead -> Anthropic\nG_N039,Wang Xiaochuan,,person,China,Beijing,1978-10-03,,exact,active,,,CORE,confirmed,[S033][S034],Sogou founder/CEO; Baichuan founder\nG_N040,Jiang Daxin,Daxin Jiang,person,China,Shanghai,,,approximate,active,,,CORE,confirmed,[S035][S036],Ex-MSRA global VP/chief scientist; StepFun founder\nG_N041,Yan Junjie,,person,China,Shanghai,1989,,year,active,,,CORE,confirmed,[S037][S038],Ex-SenseTime VP; MiniMax founder\nG_N042,Tang Jie,,person,China,Beijing,,,approximate,active,,,CORE,confirmed,[S039][S040],Tsinghua KEG professor; Zhipu cofounder; BAAI\nG_N043,Arthur Mensch,,person,France,Paris,1992,,year,active,,,CORE,confirmed,[S041][S042],Ex-DeepMind (Chinchilla); Mistral CEO\nG_N044,Guillaume Lample,,person,France,Paris,,,approximate,active,,,CORE,confirmed,[S041][S042],Ex-Meta FAIR (LLaMA); Mistral chief scientist\nG_N045,Timothee Lacroix,Timoth\u00e9e Lacroix,person,France,Paris,,,approximate,active,,,CORE,confirmed,[S041][S042],Ex-Meta FAIR (LLaMA); Mistral CTO\nG_N046,Barret Zoph,,person,US,San Francisco,,,approximate,active,,,CORE,confirmed,[S043],OpenAI post-training -> TML CTO -> OpenAI\nG_N047,Alibaba,Alibaba Group,parent_company,China,Hangzhou,1999,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S044],Qwen/Tongyi parent; cross-lab investor\nG_N048,ByteDance,,parent_company,China,Beijing,2012,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S044],Doubao/Seed parent\nG_N049,Baidu,,parent_company,China,Beijing,2000,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S044],ERNIE parent; no lab-level edges yet (see uncertainty U016)\nG_N050,Tencent,,parent_company,China,Shenzhen,1998,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S044][S045],Hunyuan parent; investor; acquired Sogou\nG_N051,SenseTime,,company,China,Hong Kong/Shanghai,2014,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S037][S038],Computer vision; MiniMax founder origin\nG_N052,Tongyi Lab (Qwen),Qwen team,lab,China,Hangzhou,2023,,year,active,G_N047,,CORE,strongly supported,[S044][S046],Alibaba LLM lab (merged from DAMO Academy)\nG_N053,ByteDance Seed,Doubao / Seed,lab,China,Beijing,2023,,year,active,G_N048,,CORE,strongly supported,[S044],ByteDance foundation-model lab\nG_N054,Amazon,Amazon.com / AWS,compute_provider,US,Seattle,1994,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S047][S048],Anthropic investor + AWS/Trainium\nG_N055,Google Cloud,,compute_provider,US,Mountain View,2008,,year,active,G_N021,,STRUCTURAL_SUPPORT,confirmed,[S049],TPU provider to Anthropic\nG_N056,SoftBank,SoftBank Group,funder,Japan,Tokyo,1981,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S050][S051],Lead OpenAI investor 2025\nG_N057,Inflection AI,,lab,US,Palo Alto,2022,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S023][S024],Suleyman/Hoffman/Simonyan; MS acqui-hire target\nG_N058,Character.AI,,lab,US,Menlo Park,2021-10,,month,active,,,STRUCTURAL_SUPPORT,confirmed,[S018][S020],Shazeer/De Freitas; Google acqui-hire target\nG_N059,Scale AI,,company,US,San Francisco,2016,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S028][S029],Data labeling; Meta 49% non-voting stake\nG_N060,Mistral AI,,lab,France,Paris,2023-04,,month,active,,,CORE,confirmed,[S041][S042],European frontier lab; DeepMind + FAIR founder export\nG_N061,Sinovation Ventures,Innovation Works,funder,China,Beijing,2009,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S026][S027],Kai-Fu Lee VC; 01.AI incubator\nG_N062,Sogou,,company,China,Beijing,2004,,year,historical (acquired),G_N050,,STRUCTURAL_SUPPORT,confirmed,[S033][S034],Wang Xiaochuan search co; Tencent-acquired 2021\nG_N063,Microsoft Research Asia,MSRA,lab,China,Beijing,1998,,year,active,G_N019,,STRUCTURAL_SUPPORT,confirmed,[S026][S035],Founded by Kai-Fu Lee; StepFun founder origin\nG_N064,DNNresearch,,lab,Canada,Toronto,2012,,year,historical (acquired),,,CORE,confirmed,[S016][S017],Hinton/Krizhevsky/Sutskever; Google acqui-hire 2013\nG_N065,Carnegie Mellon University,CMU,university,US,Pittsburgh,1900,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S031],Yang Zhilin PhD (Salakhutdinov & Cohen)\nG_N066,Meta Superintelligence Labs,MSL,lab,US,Menlo Park,2025-06,,month,active,G_N022,,CORE,confirmed,[S028][S029],2025 reorg; FAIR persists as sub-team (see U018)\n", "edges": "edge_id,source_node,target_node,relationship_type,edge_class,start_date,end_date,date_precision,direction,weight_type,weight_value,unweighted,description,evidence_level,primitive_edge_ids,derivation_rule,source_ids,original_edge_id,notes\nG_E001,G_N021,G_N001,ACQUIRED,PRIMITIVE,2014-01,,month,directed,unweighted,,true,Google/Alphabet acquires DeepMind,confirmed,,,,[web:35][web:36],E001\nG_E002,G_N001,G_N003,MERGED_INTO,PRIMITIVE,2023-04-20,,exact,directed,unweighted,,true,DeepMind merged into Google DeepMind,confirmed,,,,[web:4][web:106],E002\nG_E003,G_N002,G_N003,MERGED_INTO,PRIMITIVE,2023-04-20,,exact,directed,unweighted,,true,Google Brain merged into Google DeepMind,confirmed,,,,[web:4][web:106],E002\nG_E004,G_N024,G_N017,STUDIED_AT,PRIMITIVE,~2007-2013,,approximate,directed,unweighted,,true,Sutskever PhD / research under Hinton group,confirmed,,,,[web:70],E003\nG_E005,G_N024,G_N002,EMPLOYED_AT,PRIMITIVE,2013,2015,year,directed,unweighted,,true,Sutskever at Google Brain (via DNNresearch acquisition),confirmed,,,,[web:70][web:74],E004\nG_E006,G_N024,G_N004,COFOUNDED,PRIMITIVE,2015-12,2024-05,month,directed,unweighted,,true,Sutskever co-founder and Chief Scientist of OpenAI,confirmed,,,,[web:42][web:70],E005\nG_E007,G_N024,G_N004,LED,PRIMITIVE,2015-12,2024-05,month,directed,unweighted,,true,Chief Scientist role,confirmed,,,,[web:42][web:70],E005\nG_E008,G_N025,G_N004,EMPLOYED_AT,PRIMITIVE,2016,2020,year,directed,unweighted,,true,Dario Amodei at OpenAI (VP Research),confirmed,,,,[web:51][web:52],E006\nG_E009,G_N025,G_N005,COFOUNDED,PRIMITIVE,2021,,year,directed,unweighted,,true,Dario Amodei co-founder and CEO of Anthropic,confirmed,,,,[web:51],E007\nG_E010,G_N004,G_N005,TEAM_MIGRATION,PRIMITIVE,2020-2021,,year,directed,talent_count,7+,false,Senior cluster (Amodei siblings + Brown Kaplan Clark McCandlish Olah Mann et al.) left OpenAI for Anthropic,confirmed,,,,[web:50][web:52][web:59],E006\nG_E011,G_N004,G_N005,FOUNDER_LINEAGE,DERIVED,2021,,year,directed,founder_count,7+,false,Anthropic founding cohort from OpenAI,confirmed,\"G_E008,G_E009,G_E010\",Lab B has multiple qualifying founders previously EMPLOYED_AT source lab + TEAM_MIGRATION evidence,[web:50][web:52][web:59],E006,Derived institutional shorthand\nG_E012,G_N024,G_N008,COFOUNDED,PRIMITIVE,2024-06-19,,exact,directed,unweighted,,true,Sutskever co-founds SSI,confirmed,,,,[web:120][web:27],E008\nG_E013,G_N004,G_N008,FOUNDER_LINEAGE,DERIVED,2024-06,,month,directed,founder_count,1,false,SSI founded by former OpenAI Chief Scientist,confirmed,\"G_E006,G_E012\",Prior COFOUNDED/LED at source + COFOUNDED at target,[web:120][web:27],E008,\nG_E014,G_N029,G_N004,EMPLOYED_AT,PRIMITIVE,2018?,2024,year,directed,unweighted,,true,Mira Murati at OpenAI (later CTO),strongly supported,,,,[web:111],E009\nG_E015,G_N029,G_N009,COFOUNDED,PRIMITIVE,2025-02,,month,directed,unweighted,,true,Mira Murati founds/leads Thinking Machines Lab,confirmed,,,,[web:110][web:111],E009\nG_E016,G_N004,G_N009,TEAM_MIGRATION,PRIMITIVE,2024-2025,,year,directed,talent_count,5+,false,Murati + Schulman Zoph Weng et al. cluster to Thinking Machines,confirmed,,,,[web:110][web:118],E009\nG_E017,G_N004,G_N009,FOUNDER_LINEAGE,DERIVED,2025-02,,month,directed,founder_count,5+,false,Thinking Machines founded largely by OpenAI alumni,confirmed,\"G_E014,G_E015,G_E016\",Multiple prior EMPLOYED_AT + COFOUNDED + TEAM_MIGRATION,[web:110][web:118],E009,\nG_E018,G_N030,G_N004,COFOUNDED,PRIMITIVE,2015-12,2018?,year,directed,unweighted,,true,Elon Musk co-founder of OpenAI (later departed),confirmed,,,,[web:40][web:42],\nG_E019,G_N030,G_N007,FOUNDED,PRIMITIVE,2023-03,,month,directed,unweighted,,true,Elon Musk founds xAI,confirmed,,,,[web:60][web:63],\nG_E020,G_N004,G_N007,TEAM_MIGRATION,PRIMITIVE,2023,,year,directed,talent_count,several,false,OpenAI alumni among xAI co-founders (e.g. Kyle Kosic),confirmed,,,,[web:63][web:26],E010\nG_E021,G_N004,G_N007,FOUNDER_LINEAGE,DERIVED,2023,,year,directed,founder_count,several,false,xAI co-founders include OpenAI alumni,confirmed,G_E020,Alumni among named co-founders,[web:63][web:26],E010,\nG_E022,G_N001,G_N007,TEAM_MIGRATION,PRIMITIVE,2023,,year,directed,talent_count,1+,false,Igor Babuschkin (DeepMind) et al. to xAI,confirmed,,,,[web:63],E011\nG_E023,G_N019,G_N004,INVESTED_IN,PRIMITIVE,2019,,year,directed,capital_approx,multi-billion,false,Microsoft multi-billion investment in OpenAI,confirmed,,,,[web:131][web:130],E012\nG_E024,G_N019,G_N004,CLOUD_PROVIDER_TO,PRIMITIVE,2019,ongoing,year,directed,unweighted,,true,Azure exclusivity / primary cloud (later modified),confirmed,,,,[web:131][web:130],E012\nG_E025,G_N010,G_N023,SPUN_OUT_FROM,PRIMITIVE,2023,,year,directed,unweighted,,true,DeepSeek originates from High-Flyer personnel/compute,confirmed,,,,[web:80][web:85],E013; v1.1: direction corrected (SPUN_OUT_FROM = new lab -> origin)\nG_E026,G_N023,G_N010,FUNDED,PRIMITIVE,2023,,year,directed,unweighted,,true,High-Flyer provides funding/infra origin for DeepSeek,confirmed,,,,[web:80][web:85],E013\nG_E027,G_N011,G_N018,ACADEMIC_SPINOUT_FROM,PRIMITIVE,2019,,year,directed,unweighted,,true,Zhipu from Tsinghua (Knowledge Engineering Lab lineage),confirmed,,,,[web:16],E014; v1.1: direction corrected (ACADEMIC_SPINOUT_FROM = lab -> university)\nG_E028,G_N012,G_N018,ACADEMIC_SPINOUT_FROM,PRIMITIVE,2023,,year,directed,unweighted,,true,Moonshot academic lineage via Yang Zhilin (Tsinghua + CMU),confirmed,,,,[web:16],E015; v1.1: direction corrected (ACADEMIC_SPINOUT_FROM = lab -> university)\nG_E029,G_N006,G_N010,OPEN_SOURCE_INFLUENCE,PRIMITIVE,2023,,year,directed,unweighted,,true,Llama open weights influence on DeepSeek (concrete recipient; retargeted v1.1),reported,,,[S054],[web:0][web:5],v1.1: retargeted from OpenAI/abstract ecosystem per audit; further concrete targets (e.g. 01.AI Yi) pending primary confirmation\nG_E030,G_N002,G_N004,RESEARCH_INFLUENCE,PRIMITIVE,2017,,year,directed,unweighted,,true,Transformer architecture (Google Brain) underpins subsequent LLM work including OpenAI models,confirmed,,,,[web:0][web:4],E017\nG_E031,G_N024,G_N008,LED,PRIMITIVE,2024-06,,month,directed,unweighted,,true,Sutskever leadership at SSI,confirmed,,,,[web:120],E019\nG_E032,G_N026,G_N001,COFOUNDED,PRIMITIVE,2010,,year,directed,unweighted,,true,Demis Hassabis co-founds DeepMind,confirmed,,,,[web:4],\nG_E033,G_N026,G_N003,LED,PRIMITIVE,2023-04,,month,directed,unweighted,,true,Hassabis leads Google DeepMind,confirmed,,,,[web:4],\nG_E034,G_N027,G_N006,FOUNDED,PRIMITIVE,2013-12,,month,directed,unweighted,,true,Yann LeCun founding director of FAIR,confirmed,,,,[web:90][web:91],\nG_E035,G_N028,G_N010,FOUNDED,PRIMITIVE,2023,,year,directed,unweighted,,true,Liang Wenfeng founds DeepSeek,confirmed,,,,[web:80],\nG_E036,G_N028,G_N023,COFOUNDED,PRIMITIVE,2015,,year,directed,unweighted,,true,Liang involved in High-Flyer founding,confirmed,,,,[web:80],\nG_E037,G_N002,G_N021,SUBSIDIARY_OF,PRIMITIVE,2011,2023,year,directed,unweighted,,true,Google Brain under Google/Alphabet,confirmed,,,,E002 related,v1.1: direction corrected (SUBSIDIARY_OF = division -> parent)\nG_E038,G_N006,G_N022,SUBSIDIARY_OF,PRIMITIVE,2013,,year,directed,unweighted,,true,FAIR under Meta/Facebook,confirmed,,,,,v1.1: direction corrected (SUBSIDIARY_OF = division -> parent)\nG_E039,G_N031,G_N017,EMPLOYED_AT,PRIMITIVE,1987,,year,directed,unweighted,,true,Professor of CS; split time with Google 2013-2023,strongly supported,,,[S015][S016],,\nG_E040,G_N031,G_N064,FOUNDED,PRIMITIVE,2012,2013,year,directed,unweighted,,true,\"Co-founded DNNresearch with Krizhevsky, Sutskever\",confirmed,,,[S016][S017],,\nG_E041,G_N021,G_N064,ACQUIRED,PRIMITIVE,2013-03,,month,directed,unweighted,,true,Google acquires DNNresearch (announced 2013-03-12); terms undisclosed,confirmed,,,[S016][S017],,\"Google pre-Alphabet; mapped to Alphabet node. ~$44M reported, unconfirmed (U011)\"\nG_E042,G_N031,G_N002,EMPLOYED_AT,PRIMITIVE,2013-03,2023-05,month,directed,unweighted,,true,Part-time VP/Engineering Fellow; left May 2023,confirmed,,,[S015],,\nG_E043,G_N024,G_N064,COFOUNDED,PRIMITIVE,2012,2013,year,directed,unweighted,,true,\"Sutskever cofounded DNNresearch with Hinton, Krizhevsky\",confirmed,,,[S016],,\nG_E044,G_N032,G_N002,EMPLOYED_AT,PRIMITIVE,2000,2021,year,directed,unweighted,,true,Joined Google 2000; Transformer co-author (2017); LaMDA/Meena,confirmed,,,[S018][S020],,Google tenure predates Brain's 2011 start; mapped to Brain for research-era work\nG_E045,G_N032,G_N058,COFOUNDED,PRIMITIVE,2021-10,2024-08,month,directed,unweighted,,true,Cofounded Character.AI with Daniel De Freitas,confirmed,,,[S018][S020],,\nG_E046,G_N021,G_N058,ACQUIRED,PRIMITIVE,2024-08,,month,directed,unweighted,,true,$2.7B non-exclusive license + founder/team hire; DOJ reviewing,confirmed,,,[S018][S019],,Acqui-hire-without-acquisition; not formal M&A (U014)\nG_E047,G_N032,G_N003,EMPLOYED_AT,PRIMITIVE,2024-08,2026-06,month,directed,unweighted,,true,Gemini co-lead; returned via Character.AI deal,confirmed,,,[S018][S019],,\nG_E048,G_N032,G_N004,EMPLOYED_AT,PRIMITIVE,2026-06,,month,directed,unweighted,,true,Joined OpenAI (announced 2026-06-18),reported,,,[S019],,\nG_E049,G_N058,G_N003,TEAM_MIGRATION,PRIMITIVE,2024-08,,month,directed,person_count,30,false,\"Shazeer, De Freitas + ~30 researchers to Google DeepMind\",confirmed,,,[S020],,\nG_E050,G_N033,G_N004,COFOUNDED,PRIMITIVE,2015-12,2024-08,month,directed,unweighted,,true,OpenAI cofounder; RL/PPO lead,confirmed,,,[S021][S022],,\nG_E051,G_N033,G_N005,EMPLOYED_AT,PRIMITIVE,2024-08,2025-02,month,directed,unweighted,,true,~6-month Anthropic tenure,confirmed,,,[S021][S022],,\nG_E052,G_N033,G_N009,COFOUNDED,PRIMITIVE,2025-02,,month,directed,unweighted,,true,TML chief scientist; only remaining cofounder as of Jan 2026,confirmed,,,[S021][S022],,\nG_E053,G_N034,G_N001,COFOUNDED,PRIMITIVE,2010,2022,year,directed,unweighted,,true,DeepMind cofounder; left 2022,confirmed,,,[S023][S025],,\nG_E054,G_N034,G_N057,COFOUNDED,PRIMITIVE,2022,2024-03,month,directed,unweighted,,true,\"Inflection cofounder with Hoffman, Simonyan\",confirmed,,,[S023][S024],,\nG_E055,G_N034,G_N019,LED,PRIMITIVE,2024-03,,month,directed,unweighted,,true,\"EVP & CEO, Microsoft AI\",confirmed,,,[S025],,\nG_E056,G_N019,G_N057,ACQUIRED,PRIMITIVE,2024-03,,month,directed,unweighted,,true,~$650M: $620M model license + ~$30M waiver; FTC probe,confirmed,,,[S023][S024],,Acqui-hire-without-acquisition; not formal M&A (U014)\nG_E057,G_N057,G_N019,TEAM_MIGRATION,PRIMITIVE,2024-03,,month,directed,person_count,70,false,\"Suleyman, Simonyan + most of ~70-person staff\",confirmed,,,[S023][S024],,\nG_E058,G_N035,G_N063,FOUNDED,PRIMITIVE,1998,2000,year,directed,unweighted,,true,\"Founding director, Microsoft Research Asia\",confirmed,,,[S026],,\nG_E059,G_N035,G_N021,LED,PRIMITIVE,2005,2009,year,directed,unweighted,,true,\"President, Google China\",confirmed,,,[S026],,Google pre-Alphabet; mapped to Alphabet node\nG_E060,G_N035,G_N061,FOUNDED,PRIMITIVE,2009,,year,directed,unweighted,,true,Sinovation Ventures chairman & CEO,confirmed,,,[S026],,\nG_E061,G_N035,G_N015,FOUNDED,PRIMITIVE,2023-03,,month,directed,unweighted,,true,01.AI founder & CEO,confirmed,,,[S026][S027],,\nG_E062,G_N061,G_N015,INVESTED_IN,PRIMITIVE,2023,,year,directed,unweighted,,true,Incubated via Sinovation AI Institute,confirmed,,,[S026][S027],,\nG_E063,G_N036,G_N059,FOUNDED,PRIMITIVE,2016,2025-06,month,directed,unweighted,,true,Scale AI founder & CEO,confirmed,,,[S028],,\nG_E064,G_N036,G_N022,LED,PRIMITIVE,2025-06,,month,directed,unweighted,,true,\"Chief AI Officer, Meta Superintelligence Labs\",confirmed,,,[S028][S029],,\nG_E065,G_N022,G_N059,INVESTED_IN,PRIMITIVE,2025-06,,month,directed,unweighted,,true,$14.3B for 49% non-voting stake (~$29B valuation); closed 2025-06-13,confirmed,,,[S028],,\nG_E066,G_N059,G_N066,TEAM_MIGRATION,PRIMITIVE,2025-06,,month,directed,person_count,,true,Wang + small group to Meta Superintelligence Labs,confirmed,,,[S028][S029],,count not published; unweighted\nG_E067,G_N037,G_N018,STUDIED_AT,PRIMITIVE,2011,2015,year,directed,unweighted,,true,\"BS computer science, Tsinghua\",confirmed,,,[S030][S031],,\nG_E068,G_N037,G_N065,STUDIED_AT,PRIMITIVE,2015,2019,year,directed,unweighted,,true,\"PhD at CMU; advisors Salakhutdinov & Cohen; XLNet, Transformer-XL\",confirmed,,,[S030][S031],,Advisor detail folded here; advisors are not graph nodes\nG_E069,G_N037,G_N002,EMPLOYED_AT,PRIMITIVE,2015,2019,year,directed,unweighted,,true,Worked/interned at Google Brain during PhD (also Meta FAIR),strongly supported,,,[S030][S031],,Intern vs staff role varies across sources (U012)\nG_E070,G_N037,G_N012,COFOUNDED,PRIMITIVE,2023-03,,month,directed,unweighted,,true,\"Cofounded Moonshot with Zhou Xinyu, Wu Yuxin\",confirmed,,,[S030][S031],,\nG_E071,G_N042,G_N018,EMPLOYED_AT,PRIMITIVE,,,approximate,directed,unweighted,,true,\"Professor, Knowledge Engineering Group\",confirmed,,,[S039][S040],,\nG_E072,G_N042,G_N011,COFOUNDED,PRIMITIVE,2019-06,,month,directed,unweighted,,true,Cofounded Zhipu with Li Juanzi,confirmed,,,[S039][S040],,\nG_E073,G_N037,G_N042,ADVISED_BY,PRIMITIVE,,,approximate,directed,unweighted,,true,Yang Zhilin mentored by Tang Jie (not formal CMU supervisor),reported,,,[S030][S040],,v1.1: converted from person-to-person ADVISED to ADVISED_BY (student->advisor) to fit vocabulary (U013)\nG_E074,G_N038,G_N004,EMPLOYED_AT,PRIMITIVE,2023-07,2024-05,month,directed,unweighted,,true,Superalignment co-lead; resigned 2024-05-15,confirmed,,,[S032],,\nG_E075,G_N038,G_N005,EMPLOYED_AT,PRIMITIVE,2024-05,,month,directed,unweighted,,true,Leads alignment team at Anthropic (announced 2024-05-28),confirmed,,,[S032],,\nG_E076,G_N004,G_N005,TEAM_MIGRATION,PRIMITIVE,2024-05,,month,directed,unweighted,,true,\"Leike + scalable-oversight researchers (2024 wave, distinct from 2021 founding migration G_E010)\",strongly supported,,,[S032],,\nG_E077,G_N039,G_N062,FOUNDED,PRIMITIVE,2004,2021,year,directed,unweighted,,true,Sogou founder/CEO; stepped down Oct 2021,confirmed,,,[S033][S034],,\nG_E078,G_N050,G_N062,ACQUIRED,PRIMITIVE,2021,,year,directed,unweighted,,true,Tencent acquires Sogou; Wang resigned 2021-10-15,confirmed,,,[S034],,\nG_E079,G_N039,G_N014,FOUNDED,PRIMITIVE,2023-04,,month,directed,unweighted,,true,Baichuan founder/CEO; $50M seed,confirmed,,,[S033][S034],,\nG_E080,G_N062,G_N014,FOUNDER_LINEAGE,DERIVED,2023-04,,month,directed,founder_count,1,false,Wang Xiaochuan + ex-Sogou team (Ru Liyun) founded Baichuan,strongly supported,G_E077;G_E079,same founder led origin then founded new lab,[S033][S034],,\nG_E081,G_N050,G_N014,INVESTED_IN,PRIMITIVE,2023-10,,month,directed,unweighted,,true,Tencent in $300M round,confirmed,,,[S034],,\nG_E082,G_N047,G_N014,INVESTED_IN,PRIMITIVE,2023-10,,month,directed,unweighted,,true,Alibaba in $300M round; $691M Jul 2024 at $2.8B,confirmed,,,[S034],,\nG_E083,G_N040,G_N063,EMPLOYED_AT,PRIMITIVE,2007,2023,year,directed,unweighted,,true,\"MSRA global VP & chief scientist, STC Asia\",confirmed,,,[S035][S036],,\nG_E084,G_N040,G_N016,FOUNDED,PRIMITIVE,2023-04,,month,directed,unweighted,,true,StepFun founder/CEO (2023-04-06),confirmed,,,[S035][S036],,\nG_E085,G_N063,G_N016,FOUNDER_LINEAGE,DERIVED,2023-04,,month,directed,founder_count,1,false,Jiang Daxin (MSRA) founded StepFun; cofounder Zhu Yibo ex-ByteDance,strongly supported,G_E083;G_E084,qualifying founder previously employed at origin,[S035][S036],,\nG_E086,G_N050,G_N016,INVESTED_IN,PRIMITIVE,2024,,year,directed,unweighted,,true,Tencent Series B investor,confirmed,,,[S036],,\nG_E087,G_N041,G_N051,EMPLOYED_AT,PRIMITIVE,2015,2021,year,directed,unweighted,,true,\"SenseTime VP, vice-head research institute (6+ yrs)\",confirmed,,,[S037][S038],,\nG_E088,G_N041,G_N013,FOUNDED,PRIMITIVE,2021-12,,month,directed,unweighted,,true,\"MiniMax founder with Zhou Yucong, Yang Bin\",confirmed,,,[S037][S038],,\nG_E089,G_N051,G_N013,FOUNDER_LINEAGE,DERIVED,2021-12,,month,directed,founder_count,1,false,Multiple SenseTime CV researchers founded MiniMax,strongly supported,G_E087;G_E088,qualifying founder previously employed at origin,[S037][S038],,\nG_E090,G_N047,G_N013,INVESTED_IN,PRIMITIVE,2024-03,,month,directed,unweighted,,true,Alibaba led $600M round at $2.5B,confirmed,,,[S038],,\nG_E091,G_N050,G_N013,INVESTED_IN,PRIMITIVE,2024,,year,directed,unweighted,,true,Tencent investor (also miHoYo),confirmed,,,[S038],,\nG_E092,G_N043,G_N001,EMPLOYED_AT,PRIMITIVE,2020,2022,year,directed,unweighted,,true,DeepMind; Chinchilla/Retro co-author,confirmed,,,[S041][S042],,\nG_E093,G_N043,G_N060,COFOUNDED,PRIMITIVE,2023-04,,month,directed,unweighted,,true,Mistral CEO,confirmed,,,[S041][S042],,\nG_E094,G_N044,G_N006,EMPLOYED_AT,PRIMITIVE,2014,2023,year,directed,unweighted,,true,Meta FAIR; LLaMA co-author,confirmed,,,[S041][S042],,\nG_E095,G_N044,G_N060,COFOUNDED,PRIMITIVE,2023-04,,month,directed,unweighted,,true,Mistral chief scientist,confirmed,,,[S041][S042],,\nG_E096,G_N045,G_N006,EMPLOYED_AT,PRIMITIVE,2014,2023,year,directed,unweighted,,true,Meta FAIR; LLaMA co-author,confirmed,,,[S041][S042],,\nG_E097,G_N045,G_N060,COFOUNDED,PRIMITIVE,2023-04,,month,directed,unweighted,,true,Mistral CTO,confirmed,,,[S041][S042],,\nG_E098,G_N006,G_N060,FOUNDER_LINEAGE,DERIVED,2023-04,,month,directed,founder_count,5,false,\"Reported 5 of 14 original LLaMA authors -> Mistral (Lample, Lacroix primitives recorded)\",strongly supported,G_E094;G_E095;G_E096;G_E097,qualifying founders previously employed at origin; cluster support,[S042],,\nG_E099,G_N001,G_N060,FOUNDER_LINEAGE,DERIVED,2023-04,,month,directed,founder_count,1,false,\"Mensch (DeepMind, Chinchilla) cofounded Mistral\",strongly supported,G_E092;G_E093,qualifying founder previously employed at origin,[S041][S042],,\nG_E100,G_N046,G_N009,COFOUNDED,PRIMITIVE,2025-02,2026-01,month,directed,unweighted,,true,TML CTO,confirmed,,,[S043],,\nG_E101,G_N046,G_N004,EMPLOYED_AT,PRIMITIVE,2026-01,,month,directed,unweighted,,true,Returned to OpenAI 2026-01-14,confirmed,,,[S043],,\nG_E102,G_N009,G_N004,TEAM_MIGRATION,PRIMITIVE,2026-01,,month,directed,person_count,3,false,\"Zoph, Metz, Schoenholz return to OpenAI (reverse migration)\",confirmed,,,[S043],,\nG_E103,G_N009,G_N066,TEAM_MIGRATION,PRIMITIVE,2025-10,,month,directed,person_count,1,false,Andrew Tulloch to Meta,confirmed,,,[S043],,\nG_E104,G_N054,G_N005,INVESTED_IN,PRIMITIVE,2023-09,,month,directed,unweighted,,true,$1.25B->$4B initial; $8B total by 2024-11-22; +up to $25B Apr 2026,confirmed,,,[S047][S048],,\nG_E105,G_N054,G_N005,CHIP_PROVIDER_TO,PRIMITIVE,2023,,year,directed,unweighted,,true,AWS Trainium/Inferentia; up to 5GW; Project Rainier; primary training partner,confirmed,,,[S047][S048],,\nG_E106,G_N021,G_N005,INVESTED_IN,PRIMITIVE,2022-12,,month,directed,unweighted,,true,~$300M -> up to $2B -> +$1B (2025-01-22) -> up to $40B (2026-04-24),confirmed,,,[S049],,Initial date disputed: late 2022 vs Apr 2023 (U015)\nG_E107,G_N055,G_N005,CHIP_PROVIDER_TO,PRIMITIVE,2025-10,,month,directed,unweighted,,true,\"Up to 1M TPUs, >1GW (announced 2025-10-23)\",confirmed,,,[S049],,\nG_E108,G_N020,G_N004,INVESTED_IN,PRIMITIVE,2025-09,,month,directed,unweighted,,true,\"Up to $100B, staged per gigawatt deployed; 10GW LOI\",reported,,,[S052],,Still LOI as of Dec 2025 per NVIDIA CFO; upgrade only on definitive agreement (U017)\nG_E109,G_N020,G_N004,CHIP_PROVIDER_TO,PRIMITIVE,2025,,year,directed,unweighted,,true,Vera Rubin platform; first GW H2 2026,confirmed,,,[S052],,\nG_E110,G_N020,G_N007,CHIP_PROVIDER_TO,PRIMITIVE,2024,,year,directed,unweighted,,true,\"~555k GPUs at Colossus (H100/H200/GB200), ~2GW by Feb 2026\",confirmed,,,[S053],,\nG_E111,G_N056,G_N004,INVESTED_IN,PRIMITIVE,2025-03,2025-12,month,directed,unweighted,,true,$40B round; fully funded 2025-12-30; contingent on for-profit restructuring,confirmed,,,[S050][S051],,\nG_E112,G_N047,G_N011,INVESTED_IN,PRIMITIVE,2023,,year,directed,unweighted,,true,\"Alibaba investor in Zhipu (also Tencent, Xiaomi, Meituan)\",confirmed,,,[S040][S045],,\nG_E113,G_N052,G_N047,SUBSIDIARY_OF,PRIMITIVE,2023,,year,directed,unweighted,,true,Tongyi Lab (Qwen) under Alibaba,confirmed,,,[S046],,\nG_E114,G_N053,G_N048,SUBSIDIARY_OF,PRIMITIVE,2023,,year,directed,unweighted,,true,Seed under ByteDance,confirmed,,,[S044],,\nG_E115,G_N066,G_N022,SUBSIDIARY_OF,PRIMITIVE,2025-06,,month,directed,unweighted,,true,Meta Superintelligence Labs under Meta Platforms; FAIR persists as sub-team,confirmed,,,[S029],,FAIR NOT dissolved (U018)\nG_E116,G_N063,G_N019,SUBSIDIARY_OF,PRIMITIVE,1998,,year,directed,unweighted,,true,MSRA under Microsoft,confirmed,,,[S026],,\nG_E117,G_N055,G_N021,SUBSIDIARY_OF,PRIMITIVE,2008,,year,directed,unweighted,,true,Google Cloud under Alphabet,confirmed,,,[S049],,\n"}</script>
+<script>
+const EDGE_CLASS = {
+  EMPLOYED_AT:"personnel", FOUNDED:"personnel", COFOUNDED:"personnel", LED:"personnel",
+  ADVISED:"personnel", TEAM_MIGRATION:"personnel",
+  ACQUIRED:"institutional", MERGED_INTO:"institutional", SPUN_OUT_FROM:"institutional", SUBSIDIARY_OF:"institutional",
+  INVESTED_IN:"capital", FUNDED:"capital",
+  COMPUTE_PROVIDER_TO:"infra", CLOUD_PROVIDER_TO:"infra", CHIP_PROVIDER_TO:"infra", DATACENTER_PARTNER_OF:"infra",
+  RESEARCH_INFLUENCE:"knowledge", OPEN_SOURCE_INFLUENCE:"knowledge", MODEL_DERIVED_FROM:"knowledge",
+  STUDIED_AT:"academic", RESEARCHED_AT:"academic", ADVISED_BY:"academic", ACADEMIC_SPINOUT_FROM:"academic",
+  FOUNDER_LINEAGE:"derived", INSTITUTIONAL_DESCENT:"derived"
+};
+const CH = {
+  personnel:{label:"People (employment, founding, migration)", css:"--personnel"},
+  derived:{label:"Founder lineage (derived)", css:"--derived", dash:true},
+  institutional:{label:"Institutional (acquired, merged, subsidiary)", css:"--institutional"},
+  capital:{label:"Money (investment, funding)", css:"--capital"},
+  infra:{label:"Machines (chips, cloud, compute)", css:"--infra"},
+  knowledge:{label:"Methods & models (research, open source)", css:"--knowledge"},
+  academic:{label:"Academic (study, advising, spinout)", css:"--academic"}
+};
+const NTYPE = {
+  person:{label:"People", css:"--person", r:9},
+  lab:{label:"Labs", css:"--lab", r:13},
+  company:{label:"Companies & parents", css:"--parent", r:12},
+  parent_company:{label:null, css:"--parent", r:12},
+  university:{label:"Universities", css:"--uni", r:12},
+  funder:{label:"Funders", css:"--funder", r:11},
+  compute_provider:{label:"Compute providers", css:"--compute", r:11}
+};
+// logo domains (Google favicon service); people fall back to initials
+const DOMAINS = {
+  G_N001:"deepmind.google", G_N002:"research.google", G_N003:"deepmind.google", G_N004:"openai.com",
+  G_N005:"anthropic.com", G_N006:"ai.meta.com", G_N007:"x.ai", G_N008:"ssi.inc",
+  G_N009:"thinkingmachines.ai", G_N010:"deepseek.com", G_N011:"z.ai", G_N012:"moonshot.cn",
+  G_N013:"minimaxi.com", G_N014:"baichuan-ai.com", G_N015:"01.ai", G_N016:"stepfun.com",
+  G_N017:"utoronto.ca", G_N018:"tsinghua.edu.cn", G_N019:"microsoft.com", G_N020:"nvidia.com",
+  G_N021:"abc.xyz", G_N022:"meta.com", G_N023:"high-flyer.cn",
+  G_N047:"alibabagroup.com", G_N048:"bytedance.com", G_N049:"baidu.com", G_N050:"tencent.com",
+  G_N051:"sensetime.com", G_N052:"alibabagroup.com", G_N053:"bytedance.com", G_N054:"amazon.com",
+  G_N055:"cloud.google.com", G_N056:"group.softbank", G_N057:"inflection.ai", G_N058:"character.ai",
+  G_N059:"scale.com", G_N060:"mistral.ai", G_N061:"sinovationventures.com", G_N062:"sogou.com",
+  G_N063:"microsoft.com", G_N064:"utoronto.ca", G_N065:"cmu.edu", G_N066:"meta.com"
+};
+// radial clustering: angle sector per community
+const CLUSTER = n => {
+  if(["G_N001","G_N002","G_N003","G_N021","G_N026","G_N031","G_N055","G_N064","G_N017","G_N065"].includes(n.node_id)) return 0; // Google/academic west
+  if(["G_N004","G_N005","G_N008","G_N009","G_N007","G_N024","G_N025","G_N029","G_N030","G_N033","G_N038","G_N046","G_N058","G_N057"].includes(n.node_id)) return 1; // OpenAI + alumni
+  if(["G_N006","G_N022","G_N059","G_N060","G_N066","G_N027","G_N036","G_N043","G_N044","G_N045","G_N032","G_N034"].includes(n.node_id)) return 2; // Meta/Europe
+  if(n.country && n.country.includes("China") || ["G_N018","G_N063"].includes(n.node_id)) return 3; // China
+  return 4; // capital & compute substrate
+};
+const cvar = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+Promise.all([d3.csv("nodes.csv"), d3.csv("edges.csv")]).then(init)          // flat layout (root)
+  .catch(()=>Promise.all([d3.csv("data/nodes.csv"), d3.csv("data/edges.csv")]).then(init)) // data/ layout
+  .catch(()=>{ // file:// or offline fallback: embedded copy of the CSVs
+    const raw = JSON.parse(document.getElementById("embedded-data").textContent);
+    init([d3.csvParse(raw.nodes), d3.csvParse(raw.edges)]);
+  })
+  .catch(()=>{ document.getElementById("err").style.display="grid"; });
+
+function init([nodes, edges]){
+  const byId = new Map(nodes.map(n=>[n.node_id,n]));
+  edges = edges.filter(e=>byId.has(e.source_node)&&byId.has(e.target_node));
+  const links = edges.map(e=>({...e, source:e.source_node, target:e.target_node,
+    ch: EDGE_CLASS[e.relationship_type] || "institutional"}));
+
+
+  const svg = d3.select("#svg"), W=()=>svg.node().clientWidth, H=()=>svg.node().clientHeight;
+  const g = svg.append("g");
+  svg.call(d3.zoom().scaleExtent([.25,4]).on("zoom",ev=>g.attr("transform",ev.transform)));
+
+  // arrowheads per channel
+  const defs = svg.append("defs");
+  Object.entries(CH).forEach(([k,c])=>{
+    defs.append("marker").attr("id","arr-"+k).attr("viewBox","0 -4 8 8")
+      .attr("refX",16).attr("markerWidth",7).attr("markerHeight",7).attr("orient","auto")
+      .append("path").attr("d","M0,-3.5L8,0L0,3.5").attr("fill",cvar(c.css));
+  });
+
+  const link = g.append("g").selectAll("line").data(links).join("line")
+    .attr("stroke",d=>cvar(CH[d.ch].css))
+    .attr("stroke-opacity",.7)
+    .attr("stroke-width",d=>d.weight_value? Math.min(1+Math.sqrt(+d.weight_value),5) : 1.4)
+    .attr("stroke-dasharray",d=>(d.edge_class==="DERIVED"||d.evidence_level==="reported")?"5 4":null)
+    .attr("marker-end",d=>`url(#arr-${d.ch})`);
+
+  const node = g.append("g").selectAll("g").data(nodes).join("g")
+    .attr("cursor","pointer")
+    .call(d3.drag().on("start",dragstart).on("drag",dragged).on("end",dragend));
+
+  node.each(function(d){
+    const t = NTYPE[d.entity_type] || NTYPE.company;
+    const el = d3.select(this), r = t.r;
+    el.append("circle").attr("r",r+2).attr("fill","var(--bg)").attr("stroke",cvar(t.css)).attr("stroke-width",1.6);
+    if(d.entity_type!=="person" && DOMAINS[d.node_id]){
+      const cp = "clip-"+d.node_id;
+      defs.append("clipPath").attr("id",cp).append("circle").attr("r",r);
+      el.append("image")
+        .attr("href",`https://www.google.com/s2/favicons?domain=${DOMAINS[d.node_id]}&sz=64`)
+        .attr("x",-r).attr("y",-r).attr("width",2*r).attr("height",2*r)
+        .attr("clip-path",`url(#${cp})`)
+        .on("error",function(){ d3.select(this).remove(); fallback(el,d,r,t); });
+    } else fallback(el,d,r,t);
+    el.append("text").attr("class","lbl").attr("dy",r+13).attr("text-anchor","middle")
+      .text(d.canonical_name.length>22? d.canonical_name.slice(0,21)+"…" : d.canonical_name);
+  });
+  function fallback(el,d,r,t){
+    el.insert("circle","text").attr("r",r).attr("fill",cvar(t.css)).attr("fill-opacity",.9);
+    el.insert("text","text").attr("dy",4).attr("text-anchor","middle")
+      .attr("font-size",r).attr("fill","#10151d").attr("font-weight",700)
+      .text(d.canonical_name.split(/\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase());
+  }
+
+  // tooltip + panel
+  const tip = d3.select("#tip");
+  node.on("mousemove",(ev,d)=>{
+    tip.style("display","block").style("left",(ev.offsetX+14)+"px").style("top",(ev.offsetY+8)+"px")
+      .html(`<b>${d.canonical_name}</b><br><span style="color:var(--dim)">${d.entity_type}${d.country? " · "+d.country:""}${d.start_date? " · "+d.start_date:""}</span>`);
+  }).on("mouseleave",()=>tip.style("display","none"))
+    .on("click",(ev,d)=>select(d));
+
+  function select(d){
+    d3.select("#pName").text(d.canonical_name);
+    d3.select("#pMeta").text([d.entity_type,d.country,d.start_date,d.active_status].filter(Boolean).join(" · "));
+    const rel = links.filter(l=>l.source.node_id===d.node_id||l.target.node_id===d.node_id)
+      .sort((a,b)=>(a.start_date||"").localeCompare(b.start_date||""));
+    const html = rel.map(l=>{
+      const out = l.source.node_id===d.node_id;
+      const other = out? l.target : l.source;
+      const flags = (l.edge_class==="DERIVED"?'<span class="flag">derived</span>':'')
+                  + (l.evidence_level && l.evidence_level!=="confirmed"? `<span class="flag">${l.evidence_level}</span>`:'');
+      return `<div class="edgeitem">
+        <span class="rt" style="color:${cvar(CH[l.ch].css)}">${l.relationship_type.replace(/_/g," ")}</span>${flags}<br>
+        <span class="who">${out? "→ "+other.canonical_name : "← "+other.canonical_name}</span>
+        <div class="d">${l.start_date||""}${l.end_date? " – "+l.end_date:""}${l.description? " · "+l.description:""}</div>
+      </div>`;
+    }).join("");
+    d3.select("#pEdges").attr("class","").html(html || "No relationships in the current dataset.");
+    node.attr("opacity",n=>(n.node_id===d.node_id||rel.some(l=>l.source.node_id===n.node_id||l.target.node_id===n.node_id))?1:.18);
+    link.attr("stroke-opacity",l=>(l.source.node_id===d.node_id||l.target.node_id===d.node_id)?.95:.08);
+  }
+  svg.on("click",ev=>{ if(ev.target.tagName==="svg"){ node.attr("opacity",1); link.attr("stroke-opacity",.7);} });
+
+  // simulation
+  const sim = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d=>d.node_id).distance(d=>d.ch==="personnel"?70:100).strength(.5))
+    .force("charge", d3.forceManyBody().strength(-380))
+    .force("center", d3.forceCenter(W()/2, H()/2))
+    .force("collide", d3.forceCollide(26))
+    .on("tick", tick);
+  window.__DATA = {nodes, edges, links, byId};
+  document.dispatchEvent(new CustomEvent("dataready"));
+  function tick(){
+    link.attr("x1",d=>d.source.x).attr("y1",d=>d.source.y).attr("x2",d=>d.target.x).attr("y2",d=>d.target.y);
+    node.attr("transform",d=>`translate(${d.x},${d.y})`);
+  }
+  function dragstart(ev,d){ if(!ev.active) sim.alphaTarget(.25).restart(); d.fx=d.x; d.fy=d.y; }
+  function dragged(ev,d){ d.fx=ev.x; d.fy=ev.y; }
+  function dragend(ev,d){ if(!ev.active) sim.alphaTarget(0); if(mode==="force"){ d.fx=null; d.fy=null; } }
+
+  // layout modes
+  let mode="force";
+  const year = d=>{ const m=(d.start_date||"").match(/^(\d{4})/); return m? +m[1] : 2016; };
+  function radial(){
+    mode="radial";
+    const cx=W()/2, cy=H()/2, R=Math.min(cx,cy)-70;
+    const yr = d3.scaleLinear().domain([1985,2026]).range([R*0.12,R]).clamp(true);
+    const sector = d3.scaleBand().domain([0,1,2,3,4]).range([-Math.PI/2, 1.5*Math.PI]);
+    const groups = d3.group(nodes, CLUSTER);
+    groups.forEach((arr,k)=>{
+      arr.sort((a,b)=>year(a)-year(b));
+      arr.forEach((n,i)=>{
+        const a = sector(k) + (i+0.5)/arr.length * sector.bandwidth()*0.9;
+        n.fx = cx + Math.cos(a)*yr(year(n));
+        n.fy = cy + Math.sin(a)*yr(year(n));
+      });
+    });
+    sim.alpha(.6).restart();
+    setMode("mRadial");
+  }
+  function force(){
+    mode="force";
+    nodes.forEach(n=>{n.fx=null;n.fy=null;});
+    sim.alpha(.7).restart();
+    setMode("mForce");
+  }
+  function setMode(id){ d3.selectAll(".modes button").classed("on",false); d3.select("#"+id).classed("on",true); }
+  d3.select("#mForce").on("click",force);
+  d3.select("#mRadial").on("click",radial);
+
+  // toggles
+  const chOn = Object.fromEntries(Object.keys(CH).map(k=>[k,true]));
+  const ntOn = {person:true, lab:true, org:true, university:true, funder:true, compute_provider:true};
+  const ntKey = t => (t==="company"||t==="parent_company")? "org" : t;
+  const eTog = d3.select("#edgeTogs").selectAll("label").data(Object.entries(CH)).join("label").attr("class","tog");
+  eTog.append("input").attr("type","checkbox").property("checked",true)
+      .on("change",function(ev,[k]){ chOn[k]=this.checked; refresh(); });
+  eTog.append("span").attr("class",([k,c])=>"swatch"+(c.dash?" dash":""))
+      .style("background",([k,c])=>c.dash?null:cvar(c.css)).style("color",([k,c])=>cvar(c.css));
+  eTog.append("span").text(([k,c])=>c.label);
+
+  const ntypes = [["person","People","--person"],["lab","Labs","--lab"],["org","Companies & parents","--parent"],
+                  ["university","Universities","--uni"],["funder","Funders","--funder"],["compute_provider","Compute providers","--compute"]];
+  const nTog = d3.select("#nodeTogs").selectAll("label").data(ntypes).join("label").attr("class","tog");
+  nTog.append("input").attr("type","checkbox").property("checked",true)
+      .on("change",function(ev,[k]){ ntOn[k]=this.checked; refresh(); });
+  nTog.append("span").attr("class","dot").style("background",([k,l,c])=>cvar(c));
+  nTog.append("span").text(([k,l])=>l);
+
+  function refresh(){
+    const nodeVis = n => ntOn[ntKey(n.entity_type)];
+    node.style("display",n=>nodeVis(n)?null:"none");
+    link.style("display",l=>(chOn[l.ch] && nodeVis(l.source) && nodeVis(l.target))?null:"none");
+  }
+}
+</script>
+
+<script>
+/* ===== dashboard views (share window.__DATA from the network init) ===== */
+(function(){
+const $ = s => document.querySelector(s);
+const cv = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const yr = s => { const m=(s||"").match(/(\d{4})/); return m? +m[1] : null; };
+const rendered = {};
+function whenData(fn){ window.__DATA ? fn(window.__DATA) : document.addEventListener("dataready",()=>fn(window.__DATA),{once:true}); }
+
+/* tab controller */
+document.querySelectorAll("#tabs button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll("#tabs button").forEach(x=>x.classList.toggle("on",x===b));
+    document.querySelectorAll(".pane").forEach(p=>p.classList.toggle("on",p.id===b.dataset.p));
+    if(!rendered[b.dataset.p]){ rendered[b.dataset.p]=true; whenData(D=>RENDER[b.dataset.p](D)); }
+  });
+});
+
+const AFFIL = new Set(["EMPLOYED_AT","COFOUNDED","FOUNDED","LED","STUDIED_AT","RESEARCHED_AT"]);
+const X0 = 2009, X1 = 2027;
+
+/* ---------- TIMELINE BRAID ---------- */
+function timeline(D){
+  const insts = D.nodes.filter(n=>n.entity_type!=="person");
+  const CLK = n => CLUSTER(n);
+  const CLNAMES = ["Google / academic seeds","OpenAI & alumni","Meta / Europe","China","Capital & compute"];
+  insts.sort((a,b)=> CLK(a)-CLK(b) || (yr(a.start_date)||1990)-(yr(b.start_date)||1990));
+  const laneH = 26, mL = 168, mT = 34, mB = 10, W = Math.max(760, $("#timewrap").clientWidth||900);
+  const H = mT + insts.length*laneH + mB;
+  const x = d3.scaleLinear().domain([X0, X1]).range([mL, W-20]);
+  const laneY = new Map(insts.map((n,i)=>[n.node_id, mT + i*laneH + laneH/2]));
+  const svg = d3.select("#timewrap").append("svg").attr("width",W).attr("height",H).style("display","block");
+
+  // year grid + axis
+  for(let y=2010;y<=2026;y+=2){
+    svg.append("line").attr("x1",x(y)).attr("x2",x(y)).attr("y1",mT-6).attr("y2",H-mB).attr("stroke",cv("--line"));
+    svg.append("text").attr("class","axis").attr("x",x(y)).attr("y",mT-12).attr("text-anchor","middle").text(y);
+  }
+  svg.append("text").attr("class","axis").attr("x",mL).attr("y",mT-12).attr("text-anchor","end").text("\u2264'09 ");
+
+  // cluster separators
+  let prev=null;
+  insts.forEach(n=>{ const k=CLK(n);
+    if(k!==prev){ prev=k;
+      const y0 = laneY.get(n.node_id)-laneH/2;
+      svg.append("line").attr("x1",8).attr("x2",W-14).attr("y1",y0).attr("y2",y0).attr("stroke",cv("--line"));
+      svg.append("text").attr("class","axis").attr("x",10).attr("y",y0+11).attr("letter-spacing",".12em").text(CLNAMES[k].toUpperCase());
+    }});
+
+  // institution lifelines + labels (right-aligned into the margin)
+  insts.forEach(n=>{
+    const y0 = laneY.get(n.node_id), s = Math.max(yr(n.start_date)||X0, X0);
+    svg.append("line").attr("x1",x(s)).attr("x2",x(X1)).attr("y1",y0).attr("y2",y0)
+      .attr("stroke",cv("--line")).attr("stroke-width", n.inclusion_class==="CORE"? 2 : 1);
+    svg.append("circle").attr("cx",x(s)).attr("cy",y0).attr("r",3).attr("fill",cv("--lab"));
+    svg.append("text").attr("class","lane").attr("x",mL-8).attr("y",y0+3.5).attr("text-anchor","end")
+      .text(n.canonical_name.length>24? n.canonical_name.slice(0,23)+"\u2026" : n.canonical_name);
+  });
+
+  // institutional events (acquired / merged) as diamonds on the target lane
+  D.links.filter(l=>["ACQUIRED","MERGED_INTO"].includes(l.relationship_type)).forEach(l=>{
+    const laneNode = l.relationship_type==="ACQUIRED" ? l.target : l.source; // acquired / absorbed entity
+    const yv = laneY.get(laneNode.node_id); if(yv==null) return;
+    const xv = x(Math.max(yr(l.start_date)||X0, X0));
+    svg.append("rect").attr("x",xv-4).attr("y",yv-4).attr("width",8).attr("height",8)
+      .attr("transform",`rotate(45 ${xv} ${yv})`).attr("fill",cv("--institutional"))
+      .append("title").text(l.description||l.relationship_type);
+  });
+
+  // people threads
+  const people = D.nodes.filter(n=>n.entity_type==="person");
+  const pal = d3.schemeTableau10.concat(d3.schemeSet2, d3.schemePastel1);
+  const chips = d3.select("#pchips");
+  let iso = null;
+  const threads = [];
+  people.forEach((p,pi)=>{
+    let ten = D.links.filter(l=>AFFIL.has(l.relationship_type) && l.source.node_id===p.node_id && laneY.has(l.target.node_id))
+      .map(l=>({org:l.target.node_id, s: Math.max(yr(l.start_date)||X0, X0), e: yr(l.end_date)}))
+      .sort((a,b)=>a.s-b.s);
+    // merge same-org overlapping tenures (COFOUNDED+LED)
+    const merged=[]; ten.forEach(t=>{ const last=merged[merged.length-1];
+      if(last && last.org===t.org && t.s<=(last.e||X1)){ last.e=Math.max(last.e||t.s, t.e||last.e||t.s); }
+      else merged.push({...t}); });
+    if(merged.length<1) return;
+    merged.forEach((t,i)=>{ t.eEff = t.e || (merged[i+1]? merged[i+1].s : 2026.6); });
+    let dPath="";
+    merged.forEach((t,i)=>{ const yv=laneY.get(t.org);
+      dPath += (i? ` L ${x(t.s)} ${yv}` : `M ${x(t.s)} ${yv}`) + ` L ${x(Math.max(t.eEff,t.s+0.25))} ${yv}`; });
+    const col = pal[pi % pal.length];
+    const path = svg.append("path").attr("d",dPath).attr("fill","none")
+      .attr("stroke",col).attr("stroke-width",2).attr("stroke-opacity",.75)
+      .attr("stroke-linejoin","round");
+    path.append("title").text(p.canonical_name+" \u2014 "+merged.map(t=>D.byId.get(t.org).canonical_name).join(" \u2192 "));
+    threads.push({p, path});
+    chips.append("span").attr("class","pchip").text(p.canonical_name)
+      .on("click",function(){
+        iso = (iso===p.node_id)? null : p.node_id;
+        d3.selectAll(".pchip").classed("on",false);
+        if(iso) d3.select(this).classed("on",true);
+        threads.forEach(t=>t.path.attr("stroke-opacity", iso? (t.p.node_id===iso? 1 : .07) : .75)
+                                   .attr("stroke-width", iso&&t.p.node_id===iso? 3 : 2));
+      });
+  });
+}
+
+/* ---------- HEATMAP ---------- */
+function heatmap(D){
+  const chans = Object.keys(CH);
+  const years = ["\u2264'09"]; for(let y=2010;y<=2026;y++) years.push(String(y));
+  const bucket = l => { const y = yr(l.start_date); return y==null? null : (y<=2009? "\u2264'09" : String(Math.min(y,2026))); };
+  const cells = new Map();
+  D.links.forEach(l=>{ const b=bucket(l); if(!b) return; const k=l.ch+"|"+b;
+    (cells.get(k) || cells.set(k,[]).get(k)).push(l); });
+  const W = Math.min(1000, Math.max(680, $("#heatwrap").clientWidth||800));
+  const mL=210, mT=30, cw=(W-mL-14)/years.length, chh=34;
+  const H = mT + chans.length*chh + 8;
+  const svg = d3.select("#heatwrap").append("svg").attr("width",W).attr("height",H).style("display","block");
+  const maxN = d3.max([...cells.values()], v=>v.length)||1;
+  years.forEach((yv,j)=>svg.append("text").attr("class","axis").attr("x",mL+j*cw+cw/2).attr("y",mT-9)
+    .attr("text-anchor","middle").text(yv.replace("20","'")));
+  chans.forEach((c,i)=>{
+    svg.append("text").attr("class","lane").attr("x",mL-10).attr("y",mT+i*chh+chh/2+4)
+      .attr("text-anchor","end").text(CH[c].label.split(" (")[0]);
+    years.forEach((yv,j)=>{
+      const arr = cells.get(c+"|"+yv)||[];
+      const t = arr.length? .18 + .82*Math.sqrt(arr.length/maxN) : 0;
+      const r = svg.append("rect").attr("x",mL+j*cw+1).attr("y",mT+i*chh+1)
+        .attr("width",cw-2).attr("height",chh-2).attr("rx",3)
+        .attr("fill", arr.length? cv(CH[c].css) : cv("--panel"))
+        .attr("fill-opacity", arr.length? t : 1)
+        .attr("stroke",cv("--line")).attr("cursor",arr.length?"pointer":"default");
+      if(arr.length) r.append("title").text(`${yv} \u00b7 ${arr.length} edge${arr.length>1?"s":""}`);
+      if(arr.length) r.on("click",()=>{
+        const el=$("#heatinfo"); el.style.display="block";
+        el.innerHTML = `<b>${CH[c].label} \u00b7 ${yv}</b>` + arr.map(l=>
+          `<div class="edgeitem"><span class="rt" style="color:${cv(CH[c].css)}">${l.relationship_type.replace(/_/g," ")}</span>
+           <span class="who">${l.source.canonical_name} \u2192 ${l.target.canonical_name}</span>
+           <div class="d">${l.description||""}</div></div>`).join("");
+      });
+    });
+  });
+}
+
+/* ---------- RANKINGS ---------- */
+function rankings(D){
+  const wgt = l => { const v=parseInt(l.weight_value); return isNaN(v)? 1 : v; };
+  const MIG = new Set(["TEAM_MIGRATION","FOUNDER_LINEAGE"]);
+  const exp=new Map(), imp=new Map();
+  D.links.filter(l=>MIG.has(l.relationship_type)).forEach(l=>{
+    exp.set(l.source.node_id,(exp.get(l.source.node_id)||0)+wgt(l));
+    imp.set(l.target.node_id,(imp.get(l.target.node_id)||0)+wgt(l));
+  });
+  const bars = (map,title,note)=>{
+    const data=[...map.entries()].map(([id,v])=>({n:D.byId.get(id),v})).sort((a,b)=>b.v-a.v).slice(0,12);
+    const W=Math.min(980,Math.max(640,$("#rankwrap").clientWidth||800)), bh=25, mL=200, mT=34;
+    const H=mT+data.length*bh+8;
+    const wrap=d3.select("#rankwrap");
+    wrap.append("div").style("margin","18px 0 2px").style("font-size","13px").style("letter-spacing",".05em").text(title);
+    wrap.append("div").attr("class","sub").text(note);
+    const svg=wrap.append("svg").attr("width",W).attr("height",H).style("display","block");
+    const x=d3.scaleLinear().domain([0,d3.max(data,d=>d.v)||1]).range([0,W-mL-70]);
+    data.forEach((d,i)=>{
+      const y=mT+i*bh;
+      svg.append("text").attr("class","lane").attr("x",mL-10).attr("y",y+bh/2+4).attr("text-anchor","end").text(d.n.canonical_name);
+      svg.append("rect").attr("x",mL).attr("y",y+4).attr("height",bh-9).attr("width",x(d.v))
+        .attr("rx",3).attr("fill",cv("--personnel")).attr("fill-opacity",.85);
+      svg.append("text").attr("class","axis").attr("x",mL+x(d.v)+8).attr("y",y+bh/2+4).text(d.v);
+    });
+  };
+  bars(exp,"FOUNDER & TALENT EXPORT","Sum of outgoing TEAM_MIGRATION + FOUNDER_LINEAGE weights \u2014 who seeds the ecosystem.");
+  bars(imp,"FOUNDER & TALENT IMPORT","Sum of incoming edges \u2014 who assembles teams from elsewhere.");
+}
+
+/* ---------- CONCENTRATION ---------- */
+function concentration(D){
+  const CAP=new Set(["INVESTED_IN","FUNDED"]), INF=new Set(["COMPUTE_PROVIDER_TO","CLOUD_PROVIDER_TO","CHIP_PROVIDER_TO","DATACENTER_PARTNER_OF"]);
+  const groupOf = n => n.parent_node && D.byId.has(n.parent_node) ? D.byId.get(n.parent_node) : n; // Google Cloud -> Alphabet
+  const rels = D.links.filter(l=>CAP.has(l.relationship_type)||INF.has(l.relationship_type));
+  const pairs=new Map();
+  rels.forEach(l=>{
+    const g=groupOf(l.source), k=g.node_id+"|"+l.target.node_id;
+    const p=pairs.get(k)||{src:g,tgt:l.target,cap:[],inf:[]};
+    (CAP.has(l.relationship_type)? p.cap : p.inf).push(l); pairs.set(k,p);
+  });
+  const srcs=[...new Set([...pairs.values()].map(p=>p.src))].sort((a,b)=>a.canonical_name.localeCompare(b.canonical_name));
+  const tgts=[...new Set([...pairs.values()].map(p=>p.tgt))].sort((a,b)=>a.canonical_name.localeCompare(b.canonical_name));
+  const W=Math.min(940,Math.max(640,$("#concwrap").clientWidth||800)), rh=30, mT=40;
+  const H=mT+Math.max(srcs.length,tgts.length)*rh+16;
+  const svg=d3.select("#concwrap").append("svg").attr("width",W).attr("height",H).style("display","block");
+  const yS=new Map(srcs.map((n,i)=>[n.node_id,mT+i*rh+rh/2]));
+  const yT=new Map(tgts.map((n,i)=>[n.node_id,mT+i*rh+rh/2]));
+  const xS=230, xT=W-230;
+  svg.append("text").attr("class","axis").attr("x",xS).attr("y",18).attr("text-anchor","end").attr("letter-spacing",".12em").text("CAPITAL & COMPUTE");
+  svg.append("text").attr("class","axis").attr("x",xT).attr("y",18).attr("letter-spacing",".12em").text("LABS");
+  [...pairs.values()].forEach(p=>{
+    const dual=p.cap.length&&p.inf.length, y1=yS.get(p.src.node_id), y2=yT.get(p.tgt.node_id);
+    const draw=(col,off)=>svg.append("path")
+      .attr("d",`M ${xS+8} ${y1+off} C ${(xS+xT)/2} ${y1+off}, ${(xS+xT)/2} ${y2+off}, ${xT-8} ${y2+off}`)
+      .attr("fill","none").attr("stroke",col).attr("stroke-width",dual?2.6:1.6).attr("stroke-opacity",dual?.95:.55)
+      .append("title").text(p.cap.concat(p.inf).map(l=>l.description).join("\n"));
+    if(p.cap.length) draw(cv("--capital"), p.inf.length?-2:0);
+    if(p.inf.length) draw(cv("--infra"),  p.cap.length? 2:0);
+  });
+  srcs.forEach(n=>svg.append("text").attr("class","lane").attr("x",xS).attr("y",yS.get(n.node_id)+4).attr("text-anchor","end").text(n.canonical_name));
+  tgts.forEach(n=>svg.append("text").attr("class","lane").attr("x",xT).attr("y",yT.get(n.node_id)+4).text(n.canonical_name));
+  const duals=[...pairs.values()].filter(p=>p.cap.length&&p.inf.length);
+  $("#dualwrap").innerHTML = "<b>Dual-role pairs (investor + compute to the same lab)</b>" +
+    duals.map(p=>`<div class="edgeitem"><span class="who">${p.src.canonical_name} \u2192 ${p.tgt.canonical_name}</span>
+      <div class="d">${p.cap.map(l=>l.description).join(" \u00b7 ")}<br>${p.inf.map(l=>l.description).join(" \u00b7 ")}</div></div>`).join("");
+}
+
+const RENDER = {"pane-time":timeline, "pane-heat":heatmap, "pane-rank":rankings, "pane-conc":concentration};
+})();
+</script>
+</body>
+</html>

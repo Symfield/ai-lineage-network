@@ -1,0 +1,118 @@
+edge_id,source_node,target_node,relationship_type,edge_class,start_date,end_date,date_precision,direction,weight_type,weight_value,unweighted,description,evidence_level,primitive_edge_ids,derivation_rule,source_ids,original_edge_id,notes
+G_E001,G_N021,G_N001,ACQUIRED,PRIMITIVE,2014-01,,month,directed,unweighted,,true,Google/Alphabet acquires DeepMind,confirmed,,,,[web:35][web:36],E001
+G_E002,G_N001,G_N003,MERGED_INTO,PRIMITIVE,2023-04-20,,exact,directed,unweighted,,true,DeepMind merged into Google DeepMind,confirmed,,,,[web:4][web:106],E002
+G_E003,G_N002,G_N003,MERGED_INTO,PRIMITIVE,2023-04-20,,exact,directed,unweighted,,true,Google Brain merged into Google DeepMind,confirmed,,,,[web:4][web:106],E002
+G_E004,G_N024,G_N017,STUDIED_AT,PRIMITIVE,~2007-2013,,approximate,directed,unweighted,,true,Sutskever PhD / research under Hinton group,confirmed,,,,[web:70],E003
+G_E005,G_N024,G_N002,EMPLOYED_AT,PRIMITIVE,2013,2015,year,directed,unweighted,,true,Sutskever at Google Brain (via DNNresearch acquisition),confirmed,,,,[web:70][web:74],E004
+G_E006,G_N024,G_N004,COFOUNDED,PRIMITIVE,2015-12,2024-05,month,directed,unweighted,,true,Sutskever co-founder and Chief Scientist of OpenAI,confirmed,,,,[web:42][web:70],E005
+G_E007,G_N024,G_N004,LED,PRIMITIVE,2015-12,2024-05,month,directed,unweighted,,true,Chief Scientist role,confirmed,,,,[web:42][web:70],E005
+G_E008,G_N025,G_N004,EMPLOYED_AT,PRIMITIVE,2016,2020,year,directed,unweighted,,true,Dario Amodei at OpenAI (VP Research),confirmed,,,,[web:51][web:52],E006
+G_E009,G_N025,G_N005,COFOUNDED,PRIMITIVE,2021,,year,directed,unweighted,,true,Dario Amodei co-founder and CEO of Anthropic,confirmed,,,,[web:51],E007
+G_E010,G_N004,G_N005,TEAM_MIGRATION,PRIMITIVE,2020-2021,,year,directed,talent_count,7+,false,Senior cluster (Amodei siblings + Brown Kaplan Clark McCandlish Olah Mann et al.) left OpenAI for Anthropic,confirmed,,,,[web:50][web:52][web:59],E006
+G_E011,G_N004,G_N005,FOUNDER_LINEAGE,DERIVED,2021,,year,directed,founder_count,7+,false,Anthropic founding cohort from OpenAI,confirmed,"G_E008,G_E009,G_E010",Lab B has multiple qualifying founders previously EMPLOYED_AT source lab + TEAM_MIGRATION evidence,[web:50][web:52][web:59],E006,Derived institutional shorthand
+G_E012,G_N024,G_N008,COFOUNDED,PRIMITIVE,2024-06-19,,exact,directed,unweighted,,true,Sutskever co-founds SSI,confirmed,,,,[web:120][web:27],E008
+G_E013,G_N004,G_N008,FOUNDER_LINEAGE,DERIVED,2024-06,,month,directed,founder_count,1,false,SSI founded by former OpenAI Chief Scientist,confirmed,"G_E006,G_E012",Prior COFOUNDED/LED at source + COFOUNDED at target,[web:120][web:27],E008,
+G_E014,G_N029,G_N004,EMPLOYED_AT,PRIMITIVE,2018?,2024,year,directed,unweighted,,true,Mira Murati at OpenAI (later CTO),strongly supported,,,,[web:111],E009
+G_E015,G_N029,G_N009,COFOUNDED,PRIMITIVE,2025-02,,month,directed,unweighted,,true,Mira Murati founds/leads Thinking Machines Lab,confirmed,,,,[web:110][web:111],E009
+G_E016,G_N004,G_N009,TEAM_MIGRATION,PRIMITIVE,2024-2025,,year,directed,talent_count,5+,false,Murati + Schulman Zoph Weng et al. cluster to Thinking Machines,confirmed,,,,[web:110][web:118],E009
+G_E017,G_N004,G_N009,FOUNDER_LINEAGE,DERIVED,2025-02,,month,directed,founder_count,5+,false,Thinking Machines founded largely by OpenAI alumni,confirmed,"G_E014,G_E015,G_E016",Multiple prior EMPLOYED_AT + COFOUNDED + TEAM_MIGRATION,[web:110][web:118],E009,
+G_E018,G_N030,G_N004,COFOUNDED,PRIMITIVE,2015-12,2018?,year,directed,unweighted,,true,Elon Musk co-founder of OpenAI (later departed),confirmed,,,,[web:40][web:42],
+G_E019,G_N030,G_N007,FOUNDED,PRIMITIVE,2023-03,,month,directed,unweighted,,true,Elon Musk founds xAI,confirmed,,,,[web:60][web:63],
+G_E020,G_N004,G_N007,TEAM_MIGRATION,PRIMITIVE,2023,,year,directed,talent_count,several,false,OpenAI alumni among xAI co-founders (e.g. Kyle Kosic),confirmed,,,,[web:63][web:26],E010
+G_E021,G_N004,G_N007,FOUNDER_LINEAGE,DERIVED,2023,,year,directed,founder_count,several,false,xAI co-founders include OpenAI alumni,confirmed,G_E020,Alumni among named co-founders,[web:63][web:26],E010,
+G_E022,G_N001,G_N007,TEAM_MIGRATION,PRIMITIVE,2023,,year,directed,talent_count,1+,false,Igor Babuschkin (DeepMind) et al. to xAI,confirmed,,,,[web:63],E011
+G_E023,G_N019,G_N004,INVESTED_IN,PRIMITIVE,2019,,year,directed,capital_approx,multi-billion,false,Microsoft multi-billion investment in OpenAI,confirmed,,,,[web:131][web:130],E012
+G_E024,G_N019,G_N004,CLOUD_PROVIDER_TO,PRIMITIVE,2019,ongoing,year,directed,unweighted,,true,Azure exclusivity / primary cloud (later modified),confirmed,,,,[web:131][web:130],E012
+G_E025,G_N010,G_N023,SPUN_OUT_FROM,PRIMITIVE,2023,,year,directed,unweighted,,true,DeepSeek originates from High-Flyer personnel/compute,confirmed,,,,[web:80][web:85],E013; v1.1: direction corrected (SPUN_OUT_FROM = new lab -> origin)
+G_E026,G_N023,G_N010,FUNDED,PRIMITIVE,2023,,year,directed,unweighted,,true,High-Flyer provides funding/infra origin for DeepSeek,confirmed,,,,[web:80][web:85],E013
+G_E027,G_N011,G_N018,ACADEMIC_SPINOUT_FROM,PRIMITIVE,2019,,year,directed,unweighted,,true,Zhipu from Tsinghua (Knowledge Engineering Lab lineage),confirmed,,,,[web:16],E014; v1.1: direction corrected (ACADEMIC_SPINOUT_FROM = lab -> university)
+G_E028,G_N012,G_N018,ACADEMIC_SPINOUT_FROM,PRIMITIVE,2023,,year,directed,unweighted,,true,Moonshot academic lineage via Yang Zhilin (Tsinghua + CMU),confirmed,,,,[web:16],E015; v1.1: direction corrected (ACADEMIC_SPINOUT_FROM = lab -> university)
+G_E029,G_N006,G_N010,OPEN_SOURCE_INFLUENCE,PRIMITIVE,2023,,year,directed,unweighted,,true,Llama open weights influence on DeepSeek (concrete recipient; retargeted v1.1),reported,,,[S054],[web:0][web:5],v1.1: retargeted from OpenAI/abstract ecosystem per audit; further concrete targets (e.g. 01.AI Yi) pending primary confirmation
+G_E030,G_N002,G_N004,RESEARCH_INFLUENCE,PRIMITIVE,2017,,year,directed,unweighted,,true,Transformer architecture (Google Brain) underpins subsequent LLM work including OpenAI models,confirmed,,,,[web:0][web:4],E017
+G_E031,G_N024,G_N008,LED,PRIMITIVE,2024-06,,month,directed,unweighted,,true,Sutskever leadership at SSI,confirmed,,,,[web:120],E019
+G_E032,G_N026,G_N001,COFOUNDED,PRIMITIVE,2010,,year,directed,unweighted,,true,Demis Hassabis co-founds DeepMind,confirmed,,,,[web:4],
+G_E033,G_N026,G_N003,LED,PRIMITIVE,2023-04,,month,directed,unweighted,,true,Hassabis leads Google DeepMind,confirmed,,,,[web:4],
+G_E034,G_N027,G_N006,FOUNDED,PRIMITIVE,2013-12,,month,directed,unweighted,,true,Yann LeCun founding director of FAIR,confirmed,,,,[web:90][web:91],
+G_E035,G_N028,G_N010,FOUNDED,PRIMITIVE,2023,,year,directed,unweighted,,true,Liang Wenfeng founds DeepSeek,confirmed,,,,[web:80],
+G_E036,G_N028,G_N023,COFOUNDED,PRIMITIVE,2015,,year,directed,unweighted,,true,Liang involved in High-Flyer founding,confirmed,,,,[web:80],
+G_E037,G_N002,G_N021,SUBSIDIARY_OF,PRIMITIVE,2011,2023,year,directed,unweighted,,true,Google Brain under Google/Alphabet,confirmed,,,,E002 related,v1.1: direction corrected (SUBSIDIARY_OF = division -> parent)
+G_E038,G_N006,G_N022,SUBSIDIARY_OF,PRIMITIVE,2013,,year,directed,unweighted,,true,FAIR under Meta/Facebook,confirmed,,,,,v1.1: direction corrected (SUBSIDIARY_OF = division -> parent)
+G_E039,G_N031,G_N017,EMPLOYED_AT,PRIMITIVE,1987,,year,directed,unweighted,,true,Professor of CS; split time with Google 2013-2023,strongly supported,,,[S015][S016],,
+G_E040,G_N031,G_N064,FOUNDED,PRIMITIVE,2012,2013,year,directed,unweighted,,true,"Co-founded DNNresearch with Krizhevsky, Sutskever",confirmed,,,[S016][S017],,
+G_E041,G_N021,G_N064,ACQUIRED,PRIMITIVE,2013-03,,month,directed,unweighted,,true,Google acquires DNNresearch (announced 2013-03-12); terms undisclosed,confirmed,,,[S016][S017],,"Google pre-Alphabet; mapped to Alphabet node. ~$44M reported, unconfirmed (U011)"
+G_E042,G_N031,G_N002,EMPLOYED_AT,PRIMITIVE,2013-03,2023-05,month,directed,unweighted,,true,Part-time VP/Engineering Fellow; left May 2023,confirmed,,,[S015],,
+G_E043,G_N024,G_N064,COFOUNDED,PRIMITIVE,2012,2013,year,directed,unweighted,,true,"Sutskever cofounded DNNresearch with Hinton, Krizhevsky",confirmed,,,[S016],,
+G_E044,G_N032,G_N002,EMPLOYED_AT,PRIMITIVE,2000,2021,year,directed,unweighted,,true,Joined Google 2000; Transformer co-author (2017); LaMDA/Meena,confirmed,,,[S018][S020],,Google tenure predates Brain's 2011 start; mapped to Brain for research-era work
+G_E045,G_N032,G_N058,COFOUNDED,PRIMITIVE,2021-10,2024-08,month,directed,unweighted,,true,Cofounded Character.AI with Daniel De Freitas,confirmed,,,[S018][S020],,
+G_E046,G_N021,G_N058,ACQUIRED,PRIMITIVE,2024-08,,month,directed,unweighted,,true,$2.7B non-exclusive license + founder/team hire; DOJ reviewing,confirmed,,,[S018][S019],,Acqui-hire-without-acquisition; not formal M&A (U014)
+G_E047,G_N032,G_N003,EMPLOYED_AT,PRIMITIVE,2024-08,2026-06,month,directed,unweighted,,true,Gemini co-lead; returned via Character.AI deal,confirmed,,,[S018][S019],,
+G_E048,G_N032,G_N004,EMPLOYED_AT,PRIMITIVE,2026-06,,month,directed,unweighted,,true,Joined OpenAI (announced 2026-06-18),reported,,,[S019],,
+G_E049,G_N058,G_N003,TEAM_MIGRATION,PRIMITIVE,2024-08,,month,directed,person_count,30,false,"Shazeer, De Freitas + ~30 researchers to Google DeepMind",confirmed,,,[S020],,
+G_E050,G_N033,G_N004,COFOUNDED,PRIMITIVE,2015-12,2024-08,month,directed,unweighted,,true,OpenAI cofounder; RL/PPO lead,confirmed,,,[S021][S022],,
+G_E051,G_N033,G_N005,EMPLOYED_AT,PRIMITIVE,2024-08,2025-02,month,directed,unweighted,,true,~6-month Anthropic tenure,confirmed,,,[S021][S022],,
+G_E052,G_N033,G_N009,COFOUNDED,PRIMITIVE,2025-02,,month,directed,unweighted,,true,TML chief scientist; only remaining cofounder as of Jan 2026,confirmed,,,[S021][S022],,
+G_E053,G_N034,G_N001,COFOUNDED,PRIMITIVE,2010,2022,year,directed,unweighted,,true,DeepMind cofounder; left 2022,confirmed,,,[S023][S025],,
+G_E054,G_N034,G_N057,COFOUNDED,PRIMITIVE,2022,2024-03,month,directed,unweighted,,true,"Inflection cofounder with Hoffman, Simonyan",confirmed,,,[S023][S024],,
+G_E055,G_N034,G_N019,LED,PRIMITIVE,2024-03,,month,directed,unweighted,,true,"EVP & CEO, Microsoft AI",confirmed,,,[S025],,
+G_E056,G_N019,G_N057,ACQUIRED,PRIMITIVE,2024-03,,month,directed,unweighted,,true,~$650M: $620M model license + ~$30M waiver; FTC probe,confirmed,,,[S023][S024],,Acqui-hire-without-acquisition; not formal M&A (U014)
+G_E057,G_N057,G_N019,TEAM_MIGRATION,PRIMITIVE,2024-03,,month,directed,person_count,70,false,"Suleyman, Simonyan + most of ~70-person staff",confirmed,,,[S023][S024],,
+G_E058,G_N035,G_N063,FOUNDED,PRIMITIVE,1998,2000,year,directed,unweighted,,true,"Founding director, Microsoft Research Asia",confirmed,,,[S026],,
+G_E059,G_N035,G_N021,LED,PRIMITIVE,2005,2009,year,directed,unweighted,,true,"President, Google China",confirmed,,,[S026],,Google pre-Alphabet; mapped to Alphabet node
+G_E060,G_N035,G_N061,FOUNDED,PRIMITIVE,2009,,year,directed,unweighted,,true,Sinovation Ventures chairman & CEO,confirmed,,,[S026],,
+G_E061,G_N035,G_N015,FOUNDED,PRIMITIVE,2023-03,,month,directed,unweighted,,true,01.AI founder & CEO,confirmed,,,[S026][S027],,
+G_E062,G_N061,G_N015,INVESTED_IN,PRIMITIVE,2023,,year,directed,unweighted,,true,Incubated via Sinovation AI Institute,confirmed,,,[S026][S027],,
+G_E063,G_N036,G_N059,FOUNDED,PRIMITIVE,2016,2025-06,month,directed,unweighted,,true,Scale AI founder & CEO,confirmed,,,[S028],,
+G_E064,G_N036,G_N022,LED,PRIMITIVE,2025-06,,month,directed,unweighted,,true,"Chief AI Officer, Meta Superintelligence Labs",confirmed,,,[S028][S029],,
+G_E065,G_N022,G_N059,INVESTED_IN,PRIMITIVE,2025-06,,month,directed,unweighted,,true,$14.3B for 49% non-voting stake (~$29B valuation); closed 2025-06-13,confirmed,,,[S028],,
+G_E066,G_N059,G_N066,TEAM_MIGRATION,PRIMITIVE,2025-06,,month,directed,person_count,,true,Wang + small group to Meta Superintelligence Labs,confirmed,,,[S028][S029],,count not published; unweighted
+G_E067,G_N037,G_N018,STUDIED_AT,PRIMITIVE,2011,2015,year,directed,unweighted,,true,"BS computer science, Tsinghua",confirmed,,,[S030][S031],,
+G_E068,G_N037,G_N065,STUDIED_AT,PRIMITIVE,2015,2019,year,directed,unweighted,,true,"PhD at CMU; advisors Salakhutdinov & Cohen; XLNet, Transformer-XL",confirmed,,,[S030][S031],,Advisor detail folded here; advisors are not graph nodes
+G_E069,G_N037,G_N002,EMPLOYED_AT,PRIMITIVE,2015,2019,year,directed,unweighted,,true,Worked/interned at Google Brain during PhD (also Meta FAIR),strongly supported,,,[S030][S031],,Intern vs staff role varies across sources (U012)
+G_E070,G_N037,G_N012,COFOUNDED,PRIMITIVE,2023-03,,month,directed,unweighted,,true,"Cofounded Moonshot with Zhou Xinyu, Wu Yuxin",confirmed,,,[S030][S031],,
+G_E071,G_N042,G_N018,EMPLOYED_AT,PRIMITIVE,,,approximate,directed,unweighted,,true,"Professor, Knowledge Engineering Group",confirmed,,,[S039][S040],,
+G_E072,G_N042,G_N011,COFOUNDED,PRIMITIVE,2019-06,,month,directed,unweighted,,true,Cofounded Zhipu with Li Juanzi,confirmed,,,[S039][S040],,
+G_E073,G_N037,G_N042,ADVISED_BY,PRIMITIVE,,,approximate,directed,unweighted,,true,Yang Zhilin mentored by Tang Jie (not formal CMU supervisor),reported,,,[S030][S040],,v1.1: converted from person-to-person ADVISED to ADVISED_BY (student->advisor) to fit vocabulary (U013)
+G_E074,G_N038,G_N004,EMPLOYED_AT,PRIMITIVE,2023-07,2024-05,month,directed,unweighted,,true,Superalignment co-lead; resigned 2024-05-15,confirmed,,,[S032],,
+G_E075,G_N038,G_N005,EMPLOYED_AT,PRIMITIVE,2024-05,,month,directed,unweighted,,true,Leads alignment team at Anthropic (announced 2024-05-28),confirmed,,,[S032],,
+G_E076,G_N004,G_N005,TEAM_MIGRATION,PRIMITIVE,2024-05,,month,directed,unweighted,,true,"Leike + scalable-oversight researchers (2024 wave, distinct from 2021 founding migration G_E010)",strongly supported,,,[S032],,
+G_E077,G_N039,G_N062,FOUNDED,PRIMITIVE,2004,2021,year,directed,unweighted,,true,Sogou founder/CEO; stepped down Oct 2021,confirmed,,,[S033][S034],,
+G_E078,G_N050,G_N062,ACQUIRED,PRIMITIVE,2021,,year,directed,unweighted,,true,Tencent acquires Sogou; Wang resigned 2021-10-15,confirmed,,,[S034],,
+G_E079,G_N039,G_N014,FOUNDED,PRIMITIVE,2023-04,,month,directed,unweighted,,true,Baichuan founder/CEO; $50M seed,confirmed,,,[S033][S034],,
+G_E080,G_N062,G_N014,FOUNDER_LINEAGE,DERIVED,2023-04,,month,directed,founder_count,1,false,Wang Xiaochuan + ex-Sogou team (Ru Liyun) founded Baichuan,strongly supported,G_E077;G_E079,same founder led origin then founded new lab,[S033][S034],,
+G_E081,G_N050,G_N014,INVESTED_IN,PRIMITIVE,2023-10,,month,directed,unweighted,,true,Tencent in $300M round,confirmed,,,[S034],,
+G_E082,G_N047,G_N014,INVESTED_IN,PRIMITIVE,2023-10,,month,directed,unweighted,,true,Alibaba in $300M round; $691M Jul 2024 at $2.8B,confirmed,,,[S034],,
+G_E083,G_N040,G_N063,EMPLOYED_AT,PRIMITIVE,2007,2023,year,directed,unweighted,,true,"MSRA global VP & chief scientist, STC Asia",confirmed,,,[S035][S036],,
+G_E084,G_N040,G_N016,FOUNDED,PRIMITIVE,2023-04,,month,directed,unweighted,,true,StepFun founder/CEO (2023-04-06),confirmed,,,[S035][S036],,
+G_E085,G_N063,G_N016,FOUNDER_LINEAGE,DERIVED,2023-04,,month,directed,founder_count,1,false,Jiang Daxin (MSRA) founded StepFun; cofounder Zhu Yibo ex-ByteDance,strongly supported,G_E083;G_E084,qualifying founder previously employed at origin,[S035][S036],,
+G_E086,G_N050,G_N016,INVESTED_IN,PRIMITIVE,2024,,year,directed,unweighted,,true,Tencent Series B investor,confirmed,,,[S036],,
+G_E087,G_N041,G_N051,EMPLOYED_AT,PRIMITIVE,2015,2021,year,directed,unweighted,,true,"SenseTime VP, vice-head research institute (6+ yrs)",confirmed,,,[S037][S038],,
+G_E088,G_N041,G_N013,FOUNDED,PRIMITIVE,2021-12,,month,directed,unweighted,,true,"MiniMax founder with Zhou Yucong, Yang Bin",confirmed,,,[S037][S038],,
+G_E089,G_N051,G_N013,FOUNDER_LINEAGE,DERIVED,2021-12,,month,directed,founder_count,1,false,Multiple SenseTime CV researchers founded MiniMax,strongly supported,G_E087;G_E088,qualifying founder previously employed at origin,[S037][S038],,
+G_E090,G_N047,G_N013,INVESTED_IN,PRIMITIVE,2024-03,,month,directed,unweighted,,true,Alibaba led $600M round at $2.5B,confirmed,,,[S038],,
+G_E091,G_N050,G_N013,INVESTED_IN,PRIMITIVE,2024,,year,directed,unweighted,,true,Tencent investor (also miHoYo),confirmed,,,[S038],,
+G_E092,G_N043,G_N001,EMPLOYED_AT,PRIMITIVE,2020,2022,year,directed,unweighted,,true,DeepMind; Chinchilla/Retro co-author,confirmed,,,[S041][S042],,
+G_E093,G_N043,G_N060,COFOUNDED,PRIMITIVE,2023-04,,month,directed,unweighted,,true,Mistral CEO,confirmed,,,[S041][S042],,
+G_E094,G_N044,G_N006,EMPLOYED_AT,PRIMITIVE,2014,2023,year,directed,unweighted,,true,Meta FAIR; LLaMA co-author,confirmed,,,[S041][S042],,
+G_E095,G_N044,G_N060,COFOUNDED,PRIMITIVE,2023-04,,month,directed,unweighted,,true,Mistral chief scientist,confirmed,,,[S041][S042],,
+G_E096,G_N045,G_N006,EMPLOYED_AT,PRIMITIVE,2014,2023,year,directed,unweighted,,true,Meta FAIR; LLaMA co-author,confirmed,,,[S041][S042],,
+G_E097,G_N045,G_N060,COFOUNDED,PRIMITIVE,2023-04,,month,directed,unweighted,,true,Mistral CTO,confirmed,,,[S041][S042],,
+G_E098,G_N006,G_N060,FOUNDER_LINEAGE,DERIVED,2023-04,,month,directed,founder_count,5,false,"Reported 5 of 14 original LLaMA authors -> Mistral (Lample, Lacroix primitives recorded)",strongly supported,G_E094;G_E095;G_E096;G_E097,qualifying founders previously employed at origin; cluster support,[S042],,
+G_E099,G_N001,G_N060,FOUNDER_LINEAGE,DERIVED,2023-04,,month,directed,founder_count,1,false,"Mensch (DeepMind, Chinchilla) cofounded Mistral",strongly supported,G_E092;G_E093,qualifying founder previously employed at origin,[S041][S042],,
+G_E100,G_N046,G_N009,COFOUNDED,PRIMITIVE,2025-02,2026-01,month,directed,unweighted,,true,TML CTO,confirmed,,,[S043],,
+G_E101,G_N046,G_N004,EMPLOYED_AT,PRIMITIVE,2026-01,,month,directed,unweighted,,true,Returned to OpenAI 2026-01-14,confirmed,,,[S043],,
+G_E102,G_N009,G_N004,TEAM_MIGRATION,PRIMITIVE,2026-01,,month,directed,person_count,3,false,"Zoph, Metz, Schoenholz return to OpenAI (reverse migration)",confirmed,,,[S043],,
+G_E103,G_N009,G_N066,TEAM_MIGRATION,PRIMITIVE,2025-10,,month,directed,person_count,1,false,Andrew Tulloch to Meta,confirmed,,,[S043],,
+G_E104,G_N054,G_N005,INVESTED_IN,PRIMITIVE,2023-09,,month,directed,unweighted,,true,$1.25B->$4B initial; $8B total by 2024-11-22; +up to $25B Apr 2026,confirmed,,,[S047][S048],,
+G_E105,G_N054,G_N005,CHIP_PROVIDER_TO,PRIMITIVE,2023,,year,directed,unweighted,,true,AWS Trainium/Inferentia; up to 5GW; Project Rainier; primary training partner,confirmed,,,[S047][S048],,
+G_E106,G_N021,G_N005,INVESTED_IN,PRIMITIVE,2022-12,,month,directed,unweighted,,true,~$300M -> up to $2B -> +$1B (2025-01-22) -> up to $40B (2026-04-24),confirmed,,,[S049],,Initial date disputed: late 2022 vs Apr 2023 (U015)
+G_E107,G_N055,G_N005,CHIP_PROVIDER_TO,PRIMITIVE,2025-10,,month,directed,unweighted,,true,"Up to 1M TPUs, >1GW (announced 2025-10-23)",confirmed,,,[S049],,
+G_E108,G_N020,G_N004,INVESTED_IN,PRIMITIVE,2025-09,,month,directed,unweighted,,true,"Up to $100B, staged per gigawatt deployed; 10GW LOI",reported,,,[S052],,Still LOI as of Dec 2025 per NVIDIA CFO; upgrade only on definitive agreement (U017)
+G_E109,G_N020,G_N004,CHIP_PROVIDER_TO,PRIMITIVE,2025,,year,directed,unweighted,,true,Vera Rubin platform; first GW H2 2026,confirmed,,,[S052],,
+G_E110,G_N020,G_N007,CHIP_PROVIDER_TO,PRIMITIVE,2024,,year,directed,unweighted,,true,"~555k GPUs at Colossus (H100/H200/GB200), ~2GW by Feb 2026",confirmed,,,[S053],,
+G_E111,G_N056,G_N004,INVESTED_IN,PRIMITIVE,2025-03,2025-12,month,directed,unweighted,,true,$40B round; fully funded 2025-12-30; contingent on for-profit restructuring,confirmed,,,[S050][S051],,
+G_E112,G_N047,G_N011,INVESTED_IN,PRIMITIVE,2023,,year,directed,unweighted,,true,"Alibaba investor in Zhipu (also Tencent, Xiaomi, Meituan)",confirmed,,,[S040][S045],,
+G_E113,G_N052,G_N047,SUBSIDIARY_OF,PRIMITIVE,2023,,year,directed,unweighted,,true,Tongyi Lab (Qwen) under Alibaba,confirmed,,,[S046],,
+G_E114,G_N053,G_N048,SUBSIDIARY_OF,PRIMITIVE,2023,,year,directed,unweighted,,true,Seed under ByteDance,confirmed,,,[S044],,
+G_E115,G_N066,G_N022,SUBSIDIARY_OF,PRIMITIVE,2025-06,,month,directed,unweighted,,true,Meta Superintelligence Labs under Meta Platforms; FAIR persists as sub-team,confirmed,,,[S029],,FAIR NOT dissolved (U018)
+G_E116,G_N063,G_N019,SUBSIDIARY_OF,PRIMITIVE,1998,,year,directed,unweighted,,true,MSRA under Microsoft,confirmed,,,[S026],,
+G_E117,G_N055,G_N021,SUBSIDIARY_OF,PRIMITIVE,2008,,year,directed,unweighted,,true,Google Cloud under Alphabet,confirmed,,,[S049],,

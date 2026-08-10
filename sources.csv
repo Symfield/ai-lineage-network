@@ -1,0 +1,54 @@
+source_id,title,publisher,date,URL,source_type,primary_or_secondary,reliability_notes,phase1_ref
+S001,About Google DeepMind,Google DeepMind,—,https://deepmind.google/about/,company,primary,Official history,web:4
+S002,Introducing OpenAI,OpenAI,2015-12-11,https://openai.com/index/introducing-openai/,company,primary,Founding announcement,web:42
+S003,Ilya Sutskever Wikipedia entry (cross-checked),Wikipedia / multiple,2026,https://en.wikipedia.org/wiki/Ilya_Sutskever,aggregator,secondary,Cross-checked against primary career facts,web:70
+S004,Liang Wenfeng Wikipedia / reporting,Wikipedia + specialist,2026,various,aggregator + news,secondary,Consistent on quant → DeepSeek path,web:80
+S005,Anthropic founding coverage,TechCrunch / Contrary / Wikipedia et al.,2021-2026,various,news + analysis,secondary,Multiple independent sources agree on 2021 OpenAI cluster,web:50-59
+S006,SSI founding,Company statements + Wikipedia,2024-06,various,company + secondary,primary/secondary,Founding date well attested,web:120
+S007,Thinking Machines Lab coverage,Wikipedia + WIRED et al.,2025-2026,various,news,secondary,Consistent founding team,web:110
+S008,xAI founding team announcement,Observer / company,2023-07,https://observer.com/...,news,secondary,Named co-founders,web:63
+S009,Chinese labs founder profiles,CNA / MIT TR / TechBuzzChina et al.,2025-2026,various,specialist news,secondary,Consistent academic/quant origins,web:15-24
+S010,Microsoft-OpenAI partnership,OpenAI / TechCrunch / Reuters,2019+,various,company + news,primary/secondary,Investment and Azure well documented,web:130-131
+S011,DeepMind acquisition,WSJ / company filings,2014,various,news + secondary,secondary,Price range reported,web:35
+S012,Transformer paper lineage,arXiv / Google,2017,arXiv:1706.03762,research,primary,Architecture paper itself,web:0 / web:4
+S013,Llama open-weights impact,Meta AI + secondary analyses,2023+,various,company + analysis,secondary,Broadly observed influence,web:0 web:5
+S015,Geoffrey Hinton quits Google to warn on AI,CNN Business / NYT,2023-05-01,https://www.cnn.com/2023/05/01/tech/geoffrey-hinton-leaves-google-ai-fears,major news,secondary,Departure May 2023,research:S01
+S016,Google Scoops Up DNNresearch,TechCrunch,2013-03-12,https://techcrunch.com/2013/03/12/google-scoops-up-neural-networks-startup-dnnresearch,specialist press,secondary,Terms undisclosed,research:S02
+S017,Google buys U of T startup DNNresearch,CBC News,2013-03,https://www.cbc.ca/news/science/google-buys-university-of-toronto-startup-1.1373641,major news,secondary,,research:S03
+S018,Character.AI CEO Noam Shazeer returns to Google,TechCrunch,2024-08-02,https://techcrunch.com/2024/08/02/character-ai-ceo-noam-shazeer-returns-to-google,specialist press,secondary,$2.7B license deal,research:S04
+S019,Shazeer exits Google for OpenAI,Calcalist / Outlook Business,2026-06,https://www.calcalistech.com/ctechnews/article/sy06wllflg,specialist press,secondary,June 2026 move; DOJ review of 2024 deal,research:S05
+S020,Ex-Google engineers rejoin via Character.AI partnership,CNBC,2024-08-02,https://www.cnbc.com/2024/08/02/ex-google-engineers-from-characterai-re-join-company-with-ai-partnership-.html,major news,secondary,~30 researchers,research:S06
+S021,John Schulman (career timeline),Wikipedia,2025,https://en.wikipedia.org/wiki/John_Schulman,reference,secondary,Cross-check primary bios,research:S07
+S022,Schulman leaves Anthropic for Thinking Machines,WinBuzzer / nextomoro,2025-02,https://winbuzzer.com/2025/02/07,specialist press,secondary,~6-month Anthropic tenure,research:S08
+S023,Microsoft pays Inflection ~$650M,DeepLearning.AI (Bloomberg),2024-03,https://www.deeplearning.ai/the-batch/microsoft-pays-inflection-ai-650-million-hires-most-of-its-staff,specialist press,secondary,$620M license + ~$30M waiver,research:S09
+S024,Microsoft hires Inflection founders,TechCrunch,2024-03-19,https://techcrunch.com/2024/03/19/microsoft-hires-inflection-founders-to-run-new-consumer-ai-division,specialist press,secondary,~70 staff; FTC probe,research:S10
+S025,Mustafa Suleyman joins Microsoft,Microsoft Official Blog,2024-03-19,https://blogs.microsoft.com/blog/2024/03/19,company,primary,Official announcement,research:S11
+S026,Kai-Fu Lee (career),Wikipedia,2025,https://en.wikipedia.org/wiki/Kai-Fu_Lee,reference,secondary,MSRA / Google China / Sinovation,research:S12
+S027,01.AI About Us,01.AI,2025,https://www.01.ai/about.html,company,primary,Founding,research:S13
+S028,Meta invests $14.3B in Scale AI,CNBC,2025-06-12,https://www.cnbc.com/2025/06/12/scale-ai-founder-wang-announces-exit-for-meta-part-of-14-billion-deal.html,major news,secondary,49% non-voting; closed 2025-06-13,research:S14
+S029,Zuckerberg Superintelligence Labs memo,CNBC,2025-06-30,https://www.cnbc.com/2025/06/30,major news,secondary,Recruits from OpenAI/GDM/Anthropic,research:S15
+S030,Who Is Moonshot AI?,The Wire China,2025-09-28,https://www.thewirechina.com/2025/09/28/who-is-moonshot-ai/,specialist press,secondary,Yang Zhilin biography,research:S16
+S031,Yang Zhilin,Wikipedia,2026,https://en.wikipedia.org/wiki/Yang_Zhilin,reference,secondary,CMU PhD; advisors Salakhutdinov & Cohen,research:S17
+S032,Jan Leike joins Anthropic,CNBC,2024-05-28,https://www.cnbc.com/2024/05/28,major news,secondary,Resigned OpenAI 2024-05-15,research:S18
+S033,Wang Xiaochuan TIME100 AI,TIME,2024,https://time.com/7012775,major news,secondary,Baichuan founding,research:S19
+S034,Baichuan's Big Pivot,The Wire China,2025-03-30,https://www.thewirechina.com/2025/03/30/baichuans-big-pivot-baichuan-ai-china/,specialist press,secondary,Sogou/Tencent lineage; Ru Liyun,research:S20
+S035,What is StepFun?,The Wire China,2025-06-08,https://www.thewirechina.com/2025/06/08/what-is-stepfun/,specialist press,secondary,Jiang Daxin MSRA lineage,research:S21
+S036,StepFun founding,Wikipedia / SCMP,2024-2026,https://en.wikipedia.org/wiki/StepFun,reference,secondary,Founded 2023-04-06,research:S22
+S037,MiniMax founder becomes billionaire,Forbes,2026-01-09,https://www.forbes.com/sites/ywang/2026/01/09/founder-of-chinese-ai-model-developer-minimax-becomes-a-billionaire-as-shares-surge-on-listing/,major news,secondary,SenseTime lineage,research:S23
+S038,MiniMax Group,Wikipedia,2026,https://en.wikipedia.org/wiki/MiniMax_Group,reference,secondary,Founders / investors,research:S24
+S039,Zhipu AI's rise from Tsinghua lab,Pandaily,2024,https://pro.pandaily.com/p/zhipu-ais-rise-from-tsinghua-lab,specialist press,secondary,KEG spinout,research:S25
+S040,Z.ai (Zhipu),Wikipedia,2026,https://en.wikipedia.org/wiki/Z.ai,reference,secondary,Founded 2019-06-11,research:S26
+S041,Mistral AI founding & founders,Contrary Research / IBM,2024-2025,https://research.contrary.com/company/mistral-ai,specialist press,secondary,Mensch/Lample/Lacroix pedigree,research:S27
+S042,Llama-author exodus to Mistral,Business Insider (via biography.wiki),2025,https://biography.wiki/a/Timothee_Lacroix,reference,secondary,5 of 14 Llama authors reported,research:S28
+S043,Thinking Machines cofounders return to OpenAI,Neowin / TechCrunch,2026-01-14,https://www.neowin.net,specialist press,secondary,Zoph/Metz/Schoenholz; Tulloch->Meta 2025-10,research:S29
+S044,Top Chinese AI companies guide 2026,explainx.ai,2026,https://www.explainx.ai/blog/top-chinese-ai-companies-startups-guide-2026,specialist press,secondary,Big-tech lab taxonomy,research:S30
+S045,Factbox: China's AI firms,Reuters (via AOL),2025,https://www.aol.com/news/factbox-chinas-ai-firms,major news,secondary,Zhipu/Moonshot backers,research:S31
+S046,China's Three Kingdoms in AI,RecodeChina,2025,https://www.recodechinaai.com/p/chinas-three-kingdoms-in-ai-bytedance,specialist press,secondary,Tongyi Lab / DAMO merge,research:S32
+S047,Amazon announces additional $5B (up to $25B) in Anthropic,Amazon,2026-04,https://www.aboutamazon.com/news/company-news/amazon-invests-additional-5-billion-anthropic-ai,company,primary,+$100B AWS commitment over 10 yrs,research:S33
+S048,Anthropic-AWS Trainium ($8B total),Anthropic / Amazon,2024-11-22,https://www.anthropic.com/news/anthropic-amazon-trainium,company,primary,Primary training partner,research:S34
+S049,Anthropic-Google Cloud TPU deal; investment history,Google Cloud / CNBC,2025-10-23,https://www.cnbc.com/2025/10/23/anthropic-google-cloud-deal-tpu.html,company / major news,mixed,Up to 1M TPUs >1GW; up to $40B Apr 2026,research:S35
+S050,SoftBank closes $40B OpenAI round,CNBC,2025-03-31,https://www.cnbc.com/2025/03/31,major news,secondary,Contingent on restructuring,research:S36
+S051,SoftBank OpenAI investment fully funded,CNBC,2025-12-30,https://www.cnbc.com/2025/12/30/softbank-openai-investment.html,major news,secondary,Completed 2025-12-30,research:S37
+S052,OpenAI-NVIDIA 10GW strategic partnership,NVIDIA Newsroom,2025-09-22,https://nvidianews.nvidia.com/news/openai-and-nvidia-announce-strategic-partnership-to-deploy-10gw-of-nvidia-systems,company,primary,Up to $100B LOI; still LOI per CFO Dec 2025,research:S38
+S053,Colossus data center,Wikipedia / SemiAnalysis / Introl,2025-2026,https://en.wikipedia.org/wiki/Colossus_(data_center),reference,secondary,~555k GPUs ~2GW by Feb 2026,research:S39
+S054,Overview of Chinese open-source LLMs,IntuitionLabs,2025,https://intuitionlabs.ai/articles/chinese-open-source-llms-2025,specialist press,secondary,Llama benchmarking by Chinese labs,research:S40

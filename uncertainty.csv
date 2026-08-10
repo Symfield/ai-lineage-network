@@ -1,0 +1,21 @@
+claim_id,claim,sources,conflict,status,effect_on_graph
+U001,Exact start date of Mira Murati at OpenAI,Phase I secondary,None given precisely,APPROXIMATE,EMPLOYED_AT edge uses year precision
+U002,Full list of xAI co-founders who later departed and exact dates,Multiple 2025-2026 reports,Some variation in count/timing,DISPUTED / APPROXIMATE,TEAM_MIGRATION and attrition edges remain; end dates incomplete
+U003,Precise Microsoft investment amounts and evolving exclusivity terms post-2025,Company announcements + secondary,Figures reported as “multi-billion” and later modifications,APPROXIMATE,INVESTED_IN and CLOUD_PROVIDER_TO kept; weight_value qualitative
+U004,Degree of organizational control High-Flyer retains over DeepSeek,Phase I,Described as origin/funding/infra,UNCERTAIN,SPUN_OUT_FROM and FUNDED used; no ownership edge asserted
+U005,Whether all named Anthropic co-founders left OpenAI in the same window,Multiple sources,Core cluster confirmed; exact roster of “et al.” varies slightly,STRONGLY SUPPORTED,TEAM_MIGRATION weight uses “7+”
+U006,SpaceX–xAI ownership/relationship status 2025-2026,Reports of linkage,Not fully resolved in Phase I,UNCERTAIN,No corporate-parent edge added for xAI
+U007,Exact model-derivation claims beyond architecture influence,Phase I,Mostly similarity or open-weights,ALLEGED if stronger,Only RESEARCH_INFLUENCE / OPEN_SOURCE_INFLUENCE used; no MODEL_DERIVED_FROM without explicit nodes
+U008,Chinese lab internal senior team migrations comparable to US OpenAI alumni wave,Phase I,Less granular public data,UNKNOWN,Fewer TEAM_MIGRATION edges on Chinese side
+U009,Ongoing status and product status of SSI and Thinking Machines,2025-2026 reporting,Stealth/pre-product for SSI; product claims for Thinking Machines,APPROXIMATE,active_status = active; no product nodes
+U010,Transformer → “virtually all modern LLMs” as institutional edge,Paper + consensus,Universally accepted technically; institutional mapping is selective,STRONGLY SUPPORTED,Edge kept to OpenAI as concrete example recipient; broader claim noted as influence not exclusive
+U011,DNNresearch acquisition price (~$44M) and exact founding date,S016;S017,Reported figure never officially confirmed,APPROXIMATE,ACQUIRED edge notes terms undisclosed
+U012,Yang Zhilin role at Google Brain / Meta FAIR during PhD,S030;S031,'Interned' vs 'worked' varies,APPROXIMATE,EMPLOYED_AT edge marked strongly supported
+U013,Tang Jie mentorship of Yang Zhilin,S030;S040,Mentorship reported; not formal CMU supervision,REPORTED,ADVISED_BY edge marked reported; formal advisors noted on CMU STUDIED_AT edge
+U014,"Acqui-hire-without-acquisition deals (Microsoft-Inflection, Google-Character.AI)",S018;S019;S023;S024,License+hire structure vs formal M&A; FTC/DOJ scrutiny,FLAGGED,Encoded as ACQUIRED with caveat notes; consider minting ACQUIHIRE type before freeze
+U015,Google initial Anthropic investment date,S049,Late 2022 (reported Feb 2023) vs one 2026 retrospective saying Apr 2023,DISPUTED,INVESTED_IN edge uses late-2022 with dispute note
+U016,Baidu node has no lab-level edges,S044,No documented personnel-movement/spinout edge yet; product releases insufficient per rules,INCOMPLETE,Baidu retained as flagged parent node pending ERNIE lab documentation
+U017,NVIDIA->OpenAI up to $100B,S052,Letter of intent; no definitive agreement as of Dec 2025 per NVIDIA CFO,REPORTED / LOI,INVESTED_IN edge marked reported; upgrade on definitive agreement
+U018,Meta FAIR status after 2025 reorg,S029,FAIR persists as one of four MSL sub-teams; NOT dissolved,CONFIRMED CLARIFICATION,No status change to G_N006; MSL added as separate node
+U019,Thinking Machines Jan 2026 departure causes,S043,"Alleged misconduct reported by tech press, unconfirmed by primary parties",ALLEGED,Only movement facts encoded; cause excluded
+U020,xAI Colossus cost figures,S053,~$18B GPU hardware alone vs $35-40B total development,APPROXIMATE,"CHIP_PROVIDER_TO edge notes GPU count, not cost"
