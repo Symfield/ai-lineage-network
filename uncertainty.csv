@@ -19,3 +19,8 @@ U017,NVIDIA->OpenAI up to $100B,S052,Letter of intent; no definitive agreement a
 U018,Meta FAIR status after 2025 reorg,S029,FAIR persists as one of four MSL sub-teams; NOT dissolved,CONFIRMED CLARIFICATION,No status change to G_N006; MSL added as separate node
 U019,Thinking Machines Jan 2026 departure causes,S043,"Alleged misconduct reported by tech press, unconfirmed by primary parties",ALLEGED,Only movement facts encoded; cause excluded
 U020,xAI Colossus cost figures,S053,~$18B GPU hardware alone vs $35-40B total development,APPROXIMATE,"CHIP_PROVIDER_TO edge notes GPU count, not cost"
+U021,Shared source-pool TRAINED_ON_CORPUS edges for closed models,[S055],,inference,8 edges at evidence=reported; never promote to documented; exact corpora proprietary
+U022,ALLEGED_DISTILLATION Claude->Kimi and Claude->MiniMax (Feb 2026),[S055][S060],,alleged / unadjudicated,2 edges at evidence=alleged; accuser is developer of allegedly distilled model; record allegation only
+U023,"Alibaba Cloud / Tencent Cloud hosting of Moonshot, MiniMax, Zhipu",[S055][S065],,reported,5 cloud edges pending primary confirmation
+U024,Prosperity7 -> Zhipu investment amount,[S064],,incomplete,participation confirmed; amount undisclosed; edge unweighted
+U025,"Model families collapsed to single nodes (GPT series, DeepSeek V3/R1, etc.)",[S055],,modeling decision,version-level MODEL_DERIVED_FROM not encoded in v1.2

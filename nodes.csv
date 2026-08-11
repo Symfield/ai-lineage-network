@@ -1,67 +1,94 @@
-node_id,canonical_name,alternate_names,entity_type,country,city,start_date,end_date,date_precision,active_status,parent_node,original_node_id,inclusion_class,confidence,source_ids,notes
-G_N001,DeepMind,DeepMind Technologies,lab,UK,London,2010-09,,month,historical (acquired/merged),G_N021,N001,CORE,confirmed,[web:4][web:35][web:36][web:8],Remains distinct historical node; later became part of Google DeepMind
-G_N002,Google Brain,,lab,US,Mountain View,2011,,year,historical (merged),G_N021,N002,CORE,confirmed,[web:4][web:100][web:102][web:103],Started at X; distinct until 2023 merger
-G_N003,Google DeepMind,,lab,UK/US,London / Mountain View,2023-04-20,,exact,active,G_N021,N003,CORE,confirmed,[web:4][web:3][web:106],Post-merger entity
-G_N004,OpenAI,,lab,US,San Francisco,2015-12,,month,active,,N004,CORE,confirmed,[web:42][web:40][web:7],Nonprofit origin; later structure changes tracked via events
-G_N005,Anthropic,,lab,US,San Francisco,2021,,year,active,,N005,CORE,confirmed,[web:50][web:52][web:54],
-G_N006,Meta FAIR,Facebook AI Research; Meta AI; FAIR,lab,US,Menlo Park / New York,2013-12,,month,active,G_N022,N006,CORE,confirmed,[web:90][web:91][web:99],
-G_N007,xAI,,lab,US,Palo Alto area,2023-03-09,,exact,active,,N007,CORE,confirmed,[web:60][web:63][web:64],Incorporation date; announcement later
-G_N008,Safe Superintelligence,SSI,lab,US,Palo Alto / Tel Aviv,2024-06-19,,exact,active,,N008,CORE,confirmed,[web:120][web:27][web:71],
-G_N009,Thinking Machines Lab,,lab,US,San Francisco,2025-02,,month,active,,N009,CORE,confirmed,[web:110][web:111][web:118],
-G_N010,DeepSeek,,lab,China,Hangzhou,2023-05,,month,active,,N010,CORE,confirmed,[web:80][web:15][web:85],
-G_N011,Zhipu AI,Z.ai; ChatGLM,lab,China,Beijing,2019,,year,active,,N011,CORE,confirmed,[web:16][web:17],
-G_N012,Moonshot AI,,lab,China,Beijing,2023,,year,active,,N012,CORE,confirmed,[web:16][web:17],
-G_N013,MiniMax,,lab,China,Shanghai,2021,,year,active,,N013,CORE,confirmed,[web:18][web:23],
-G_N014,Baichuan AI,,lab,China,Beijing,2023,,year,active,,N014,CORE,strongly supported,[web:17],Pivoted elements noted in Phase I
-G_N015,01.AI,,lab,China,Beijing,2023,,year,active,,N015,CORE,confirmed,[web:17][web:22],
-G_N016,StepFun,Stepfun,lab,China,,2023-04,,month,active,,N016,CORE,strongly supported,[web:17],
-G_N017,University of Toronto,Hinton group / Toronto,university,Canada,Toronto,,,unknown,active,,N017,CORE,confirmed,[web:70][web:13],Academic seed node
-G_N018,Tsinghua University,,university,China,Beijing,,,unknown,active,,N018,CORE,confirmed,[web:16],
-G_N019,Microsoft,,company,US,Redmond,,,unknown,active,,N019,STRUCTURAL_SUPPORT,confirmed,[web:130][web:131],Capital + cloud
-G_N020,NVIDIA,,compute_provider,US,Santa Clara,,,unknown,active,,N020,STRUCTURAL_SUPPORT,confirmed,multiple,Dominant chip provider
-G_N021,Alphabet,Google; Alphabet Inc.,parent_company,US,Mountain View,,,unknown,active,,N021,STRUCTURAL_SUPPORT,confirmed,,Parent of Brain/DeepMind lineage
-G_N022,Meta Platforms,Facebook; Meta,parent_company,US,Menlo Park,,,unknown,active,,N022,STRUCTURAL_SUPPORT,confirmed,,
-G_N023,High-Flyer,Huanfang; High-Flyer Quant,funder,China,Hangzhou,2015,,year,active,,N023,STRUCTURAL_SUPPORT,confirmed,[web:80],Origin of DeepSeek compute/capital
-G_N024,Ilya Sutskever,,person,US,,,,unknown,active,,N024,CORE,confirmed,[web:70][web:74],High-betweenness bridge; country=professional base (v1.1 repair)
-G_N025,Dario Amodei,,person,US,,,,unknown,active,,N025,CORE,confirmed,[web:51][web:52],country=professional base (v1.1 repair)
-G_N026,Demis Hassabis,,person,UK,,,,unknown,active,,N026,CORE,confirmed,[web:4],country=professional base (v1.1 repair)
-G_N027,Yann LeCun,,person,US,,,,unknown,active,,N027,CORE,confirmed,[web:90],country=professional base (v1.1 repair)
-G_N028,Liang Wenfeng,,person,China,,,,unknown,active,,N028,CORE,confirmed,[web:80],
-G_N029,Mira Murati,,person,US,,,,unknown,active,,N029,CORE,confirmed,[web:111],country=professional base (v1.1 repair)
-G_N030,Elon Musk,,person,US,,,,unknown,active,,N030,CORE,confirmed,[web:40][web:63],country=professional base (v1.1 repair)
-G_N031,Geoffrey Hinton,Geoffrey Everest Hinton,person,Canada/UK,Toronto,1947,,year,active,,,CORE,confirmed,[S015][S016],Deep-learning pioneer; U of T; 2024 Nobel Physics
-G_N032,Noam Shazeer,,person,US,Mountain View,1976,,year,active,,,CORE,confirmed,[S018][S019][S020],Transformer co-author; Character.AI cofounder
-G_N033,John Schulman,,person,US,San Francisco,1987,,year,active,,,CORE,confirmed,[S021][S022],OpenAI cofounder; TRPO/PPO
-G_N034,Mustafa Suleyman,,person,UK,London/Seattle,1984,,year,active,,,CORE,confirmed,[S023][S024][S025],DeepMind + Inflection cofounder; Microsoft AI CEO
-G_N035,Kai-Fu Lee,Li Kaifu,person,Taiwan/US,Beijing,1961-12-03,,exact,active,,,CORE,confirmed,[S026][S027],Founded MSRA; Google China; Sinovation; 01.AI
-G_N036,Alexandr Wang,,person,US,San Francisco,1997,,year,active,,,CORE,confirmed,[S028][S029],Scale AI founder; Meta Chief AI Officer
-G_N037,Yang Zhilin,Zhilin Yang,person,China,Beijing,1992,,year,active,,,CORE,confirmed,[S030][S031],Moonshot founder; XLNet/Transformer-XL
-G_N038,Jan Leike,,person,Germany,San Francisco,1986,,approximate,active,,,CORE,confirmed,[S032],OpenAI Superalignment co-lead -> Anthropic
-G_N039,Wang Xiaochuan,,person,China,Beijing,1978-10-03,,exact,active,,,CORE,confirmed,[S033][S034],Sogou founder/CEO; Baichuan founder
-G_N040,Jiang Daxin,Daxin Jiang,person,China,Shanghai,,,approximate,active,,,CORE,confirmed,[S035][S036],Ex-MSRA global VP/chief scientist; StepFun founder
-G_N041,Yan Junjie,,person,China,Shanghai,1989,,year,active,,,CORE,confirmed,[S037][S038],Ex-SenseTime VP; MiniMax founder
-G_N042,Tang Jie,,person,China,Beijing,,,approximate,active,,,CORE,confirmed,[S039][S040],Tsinghua KEG professor; Zhipu cofounder; BAAI
-G_N043,Arthur Mensch,,person,France,Paris,1992,,year,active,,,CORE,confirmed,[S041][S042],Ex-DeepMind (Chinchilla); Mistral CEO
-G_N044,Guillaume Lample,,person,France,Paris,,,approximate,active,,,CORE,confirmed,[S041][S042],Ex-Meta FAIR (LLaMA); Mistral chief scientist
-G_N045,Timothee Lacroix,Timothée Lacroix,person,France,Paris,,,approximate,active,,,CORE,confirmed,[S041][S042],Ex-Meta FAIR (LLaMA); Mistral CTO
-G_N046,Barret Zoph,,person,US,San Francisco,,,approximate,active,,,CORE,confirmed,[S043],OpenAI post-training -> TML CTO -> OpenAI
-G_N047,Alibaba,Alibaba Group,parent_company,China,Hangzhou,1999,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S044],Qwen/Tongyi parent; cross-lab investor
-G_N048,ByteDance,,parent_company,China,Beijing,2012,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S044],Doubao/Seed parent
-G_N049,Baidu,,parent_company,China,Beijing,2000,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S044],ERNIE parent; no lab-level edges yet (see uncertainty U016)
-G_N050,Tencent,,parent_company,China,Shenzhen,1998,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S044][S045],Hunyuan parent; investor; acquired Sogou
-G_N051,SenseTime,,company,China,Hong Kong/Shanghai,2014,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S037][S038],Computer vision; MiniMax founder origin
-G_N052,Tongyi Lab (Qwen),Qwen team,lab,China,Hangzhou,2023,,year,active,G_N047,,CORE,strongly supported,[S044][S046],Alibaba LLM lab (merged from DAMO Academy)
-G_N053,ByteDance Seed,Doubao / Seed,lab,China,Beijing,2023,,year,active,G_N048,,CORE,strongly supported,[S044],ByteDance foundation-model lab
-G_N054,Amazon,Amazon.com / AWS,compute_provider,US,Seattle,1994,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S047][S048],Anthropic investor + AWS/Trainium
-G_N055,Google Cloud,,compute_provider,US,Mountain View,2008,,year,active,G_N021,,STRUCTURAL_SUPPORT,confirmed,[S049],TPU provider to Anthropic
-G_N056,SoftBank,SoftBank Group,funder,Japan,Tokyo,1981,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S050][S051],Lead OpenAI investor 2025
-G_N057,Inflection AI,,lab,US,Palo Alto,2022,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S023][S024],Suleyman/Hoffman/Simonyan; MS acqui-hire target
-G_N058,Character.AI,,lab,US,Menlo Park,2021-10,,month,active,,,STRUCTURAL_SUPPORT,confirmed,[S018][S020],Shazeer/De Freitas; Google acqui-hire target
-G_N059,Scale AI,,company,US,San Francisco,2016,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S028][S029],Data labeling; Meta 49% non-voting stake
-G_N060,Mistral AI,,lab,France,Paris,2023-04,,month,active,,,CORE,confirmed,[S041][S042],European frontier lab; DeepMind + FAIR founder export
-G_N061,Sinovation Ventures,Innovation Works,funder,China,Beijing,2009,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S026][S027],Kai-Fu Lee VC; 01.AI incubator
-G_N062,Sogou,,company,China,Beijing,2004,,year,historical (acquired),G_N050,,STRUCTURAL_SUPPORT,confirmed,[S033][S034],Wang Xiaochuan search co; Tencent-acquired 2021
-G_N063,Microsoft Research Asia,MSRA,lab,China,Beijing,1998,,year,active,G_N019,,STRUCTURAL_SUPPORT,confirmed,[S026][S035],Founded by Kai-Fu Lee; StepFun founder origin
-G_N064,DNNresearch,,lab,Canada,Toronto,2012,,year,historical (acquired),,,CORE,confirmed,[S016][S017],Hinton/Krizhevsky/Sutskever; Google acqui-hire 2013
-G_N065,Carnegie Mellon University,CMU,university,US,Pittsburgh,1900,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S031],Yang Zhilin PhD (Salakhutdinov & Cohen)
-G_N066,Meta Superintelligence Labs,MSL,lab,US,Menlo Park,2025-06,,month,active,G_N022,,CORE,confirmed,[S028][S029],2025 reorg; FAIR persists as sub-team (see U018)
+node_id,canonical_name,alternate_names,entity_type,country,city,start_date,end_date,date_precision,active_status,parent_node,original_node_id,inclusion_class,confidence,source_ids,notes,mg_archetype,mg_arch_family,mg_training_paradigm,mg_strategic_function,mg_brand_language,mg_benchmark_family,mg_founder_origin
+G_N001,DeepMind,DeepMind Technologies,lab,UK,London,2010-09,,month,historical (acquired/merged),G_N021,N001,CORE,confirmed,[web:4][web:35][web:36][web:8],Remains distinct historical node; later became part of Google DeepMind,,,,,,,
+G_N002,Google Brain,,lab,US,Mountain View,2011,,year,historical (merged),G_N021,N002,CORE,confirmed,[web:4][web:100][web:102][web:103],Started at X; distinct until 2023 merger,,,,,,,
+G_N003,Google DeepMind,,lab,UK/US,London / Mountain View,2023-04-20,,exact,active,G_N021,N003,CORE,confirmed,[web:4][web:3][web:106],Post-merger entity,,,,,,,
+G_N004,OpenAI,,lab,US,San Francisco,2015-12,,month,active,,N004,CORE,confirmed,[web:42][web:40][web:7],Nonprofit origin; later structure changes tracked via events,,,,,,,
+G_N005,Anthropic,,lab,US,San Francisco,2021,,year,active,,N005,CORE,confirmed,[web:50][web:52][web:54],,,,,,,,
+G_N006,Meta FAIR,Facebook AI Research; Meta AI; FAIR,lab,US,Menlo Park / New York,2013-12,,month,active,G_N022,N006,CORE,confirmed,[web:90][web:91][web:99],,,,,,,,
+G_N007,xAI,,lab,US,Palo Alto area,2023-03-09,,exact,active,,N007,CORE,confirmed,[web:60][web:63][web:64],Incorporation date; announcement later,,,,,,,
+G_N008,Safe Superintelligence,SSI,lab,US,Palo Alto / Tel Aviv,2024-06-19,,exact,active,,N008,CORE,confirmed,[web:120][web:27][web:71],,,,,,,,
+G_N009,Thinking Machines Lab,,lab,US,San Francisco,2025-02,,month,active,,N009,CORE,confirmed,[web:110][web:111][web:118],,,,,,,,
+G_N010,DeepSeek,,lab,China,Hangzhou,2023-05,,month,active,,N010,CORE,confirmed,[web:80][web:15][web:85],,,,,,,,
+G_N011,Zhipu AI,Z.ai; ChatGLM,lab,China,Beijing,2019,,year,active,,N011,CORE,confirmed,[web:16][web:17],,,,,,,,
+G_N012,Moonshot AI,,lab,China,Beijing,2023,,year,active,,N012,CORE,confirmed,[web:16][web:17],,,,,,,,
+G_N013,MiniMax,,lab,China,Shanghai,2021,,year,active,,N013,CORE,confirmed,[web:18][web:23],,,,,,,,
+G_N014,Baichuan AI,,lab,China,Beijing,2023,,year,active,,N014,CORE,strongly supported,[web:17],Pivoted elements noted in Phase I,,,,,,,
+G_N015,01.AI,,lab,China,Beijing,2023,,year,active,,N015,CORE,confirmed,[web:17][web:22],,,,,,,,
+G_N016,StepFun,Stepfun,lab,China,,2023-04,,month,active,,N016,CORE,strongly supported,[web:17],,,,,,,,
+G_N017,University of Toronto,Hinton group / Toronto,university,Canada,Toronto,,,unknown,active,,N017,CORE,confirmed,[web:70][web:13],Academic seed node,,,,,,,
+G_N018,Tsinghua University,,university,China,Beijing,,,unknown,active,,N018,CORE,confirmed,[web:16],,,,,,,,
+G_N019,Microsoft,,company,US,Redmond,,,unknown,active,,N019,STRUCTURAL_SUPPORT,confirmed,[web:130][web:131],Capital + cloud,,,,,,,
+G_N020,NVIDIA,,compute_provider,US,Santa Clara,,,unknown,active,,N020,STRUCTURAL_SUPPORT,confirmed,multiple,Dominant chip provider,,,,,,,
+G_N021,Alphabet,Google; Alphabet Inc.,parent_company,US,Mountain View,,,unknown,active,,N021,STRUCTURAL_SUPPORT,confirmed,,Parent of Brain/DeepMind lineage,,,,,,,
+G_N022,Meta Platforms,Facebook; Meta,parent_company,US,Menlo Park,,,unknown,active,,N022,STRUCTURAL_SUPPORT,confirmed,,,,,,,,,
+G_N023,High-Flyer,Huanfang; High-Flyer Quant,funder,China,Hangzhou,2015,,year,active,,N023,STRUCTURAL_SUPPORT,confirmed,[web:80],Origin of DeepSeek compute/capital,,,,,,,
+G_N024,Ilya Sutskever,,person,US,,,,unknown,active,,N024,CORE,confirmed,[web:70][web:74],High-betweenness bridge; country=professional base (v1.1 repair),,,,,,,
+G_N025,Dario Amodei,,person,US,,,,unknown,active,,N025,CORE,confirmed,[web:51][web:52],country=professional base (v1.1 repair),,,,,,,
+G_N026,Demis Hassabis,,person,UK,,,,unknown,active,,N026,CORE,confirmed,[web:4],country=professional base (v1.1 repair),,,,,,,
+G_N027,Yann LeCun,,person,US,,,,unknown,active,,N027,CORE,confirmed,[web:90],country=professional base (v1.1 repair),,,,,,,
+G_N028,Liang Wenfeng,,person,China,,,,unknown,active,,N028,CORE,confirmed,[web:80],,,,,,,,
+G_N029,Mira Murati,,person,US,,,,unknown,active,,N029,CORE,confirmed,[web:111],country=professional base (v1.1 repair),,,,,,,
+G_N030,Elon Musk,,person,US,,,,unknown,active,,N030,CORE,confirmed,[web:40][web:63],country=professional base (v1.1 repair),,,,,,,
+G_N031,Geoffrey Hinton,Geoffrey Everest Hinton,person,Canada/UK,Toronto,1947,,year,active,,,CORE,confirmed,[S015][S016],Deep-learning pioneer; U of T; 2024 Nobel Physics,,,,,,,
+G_N032,Noam Shazeer,,person,US,Mountain View,1976,,year,active,,,CORE,confirmed,[S018][S019][S020],Transformer co-author; Character.AI cofounder,,,,,,,
+G_N033,John Schulman,,person,US,San Francisco,1987,,year,active,,,CORE,confirmed,[S021][S022],OpenAI cofounder; TRPO/PPO,,,,,,,
+G_N034,Mustafa Suleyman,,person,UK,London/Seattle,1984,,year,active,,,CORE,confirmed,[S023][S024][S025],DeepMind + Inflection cofounder; Microsoft AI CEO,,,,,,,
+G_N035,Kai-Fu Lee,Li Kaifu,person,Taiwan/US,Beijing,1961-12-03,,exact,active,,,CORE,confirmed,[S026][S027],Founded MSRA; Google China; Sinovation; 01.AI,,,,,,,
+G_N036,Alexandr Wang,,person,US,San Francisco,1997,,year,active,,,CORE,confirmed,[S028][S029],Scale AI founder; Meta Chief AI Officer,,,,,,,
+G_N037,Yang Zhilin,Zhilin Yang,person,China,Beijing,1992,,year,active,,,CORE,confirmed,[S030][S031],Moonshot founder; XLNet/Transformer-XL,,,,,,,
+G_N038,Jan Leike,,person,Germany,San Francisco,1986,,approximate,active,,,CORE,confirmed,[S032],OpenAI Superalignment co-lead -> Anthropic,,,,,,,
+G_N039,Wang Xiaochuan,,person,China,Beijing,1978-10-03,,exact,active,,,CORE,confirmed,[S033][S034],Sogou founder/CEO; Baichuan founder,,,,,,,
+G_N040,Jiang Daxin,Daxin Jiang,person,China,Shanghai,,,approximate,active,,,CORE,confirmed,[S035][S036],Ex-MSRA global VP/chief scientist; StepFun founder,,,,,,,
+G_N041,Yan Junjie,,person,China,Shanghai,1989,,year,active,,,CORE,confirmed,[S037][S038],Ex-SenseTime VP; MiniMax founder,,,,,,,
+G_N042,Tang Jie,,person,China,Beijing,,,approximate,active,,,CORE,confirmed,[S039][S040],Tsinghua KEG professor; Zhipu cofounder; BAAI,,,,,,,
+G_N043,Arthur Mensch,,person,France,Paris,1992,,year,active,,,CORE,confirmed,[S041][S042],Ex-DeepMind (Chinchilla); Mistral CEO,,,,,,,
+G_N044,Guillaume Lample,,person,France,Paris,,,approximate,active,,,CORE,confirmed,[S041][S042],Ex-Meta FAIR (LLaMA); Mistral chief scientist,,,,,,,
+G_N045,Timothee Lacroix,Timothée Lacroix,person,France,Paris,,,approximate,active,,,CORE,confirmed,[S041][S042],Ex-Meta FAIR (LLaMA); Mistral CTO,,,,,,,
+G_N046,Barret Zoph,,person,US,San Francisco,,,approximate,active,,,CORE,confirmed,[S043],OpenAI post-training -> TML CTO -> OpenAI,,,,,,,
+G_N047,Alibaba,Alibaba Group,parent_company,China,Hangzhou,1999,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S044],Qwen/Tongyi parent; cross-lab investor,,,,,,,
+G_N048,ByteDance,,parent_company,China,Beijing,2012,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S044],Doubao/Seed parent,,,,,,,
+G_N049,Baidu,,parent_company,China,Beijing,2000,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S044],ERNIE parent; no lab-level edges yet (see uncertainty U016),,,,,,,
+G_N050,Tencent,,parent_company,China,Shenzhen,1998,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S044][S045],Hunyuan parent; investor; acquired Sogou,,,,,,,
+G_N051,SenseTime,,company,China,Hong Kong/Shanghai,2014,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S037][S038],Computer vision; MiniMax founder origin,,,,,,,
+G_N052,Tongyi Lab (Qwen),Qwen team,lab,China,Hangzhou,2023,,year,active,G_N047,,CORE,strongly supported,[S044][S046],Alibaba LLM lab (merged from DAMO Academy),,,,,,,
+G_N053,ByteDance Seed,Doubao / Seed,lab,China,Beijing,2023,,year,active,G_N048,,CORE,strongly supported,[S044],ByteDance foundation-model lab,,,,,,,
+G_N054,Amazon,Amazon.com / AWS,compute_provider,US,Seattle,1994,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S047][S048],Anthropic investor + AWS/Trainium,,,,,,,
+G_N055,Google Cloud,,compute_provider,US,Mountain View,2008,,year,active,G_N021,,STRUCTURAL_SUPPORT,confirmed,[S049],TPU provider to Anthropic,,,,,,,
+G_N056,SoftBank,SoftBank Group,funder,Japan,Tokyo,1981,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S050][S051],Lead OpenAI investor 2025,,,,,,,
+G_N057,Inflection AI,,lab,US,Palo Alto,2022,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S023][S024],Suleyman/Hoffman/Simonyan; MS acqui-hire target,,,,,,,
+G_N058,Character.AI,,lab,US,Menlo Park,2021-10,,month,active,,,STRUCTURAL_SUPPORT,confirmed,[S018][S020],Shazeer/De Freitas; Google acqui-hire target,,,,,,,
+G_N059,Scale AI,,company,US,San Francisco,2016,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S028][S029],Data labeling; Meta 49% non-voting stake,,,,,,,
+G_N060,Mistral AI,,lab,France,Paris,2023-04,,month,active,,,CORE,confirmed,[S041][S042],European frontier lab; DeepMind + FAIR founder export,,,,,,,
+G_N061,Sinovation Ventures,Innovation Works,funder,China,Beijing,2009,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S026][S027],Kai-Fu Lee VC; 01.AI incubator,,,,,,,
+G_N062,Sogou,,company,China,Beijing,2004,,year,historical (acquired),G_N050,,STRUCTURAL_SUPPORT,confirmed,[S033][S034],Wang Xiaochuan search co; Tencent-acquired 2021,,,,,,,
+G_N063,Microsoft Research Asia,MSRA,lab,China,Beijing,1998,,year,active,G_N019,,STRUCTURAL_SUPPORT,confirmed,[S026][S035],Founded by Kai-Fu Lee; StepFun founder origin,,,,,,,
+G_N064,DNNresearch,,lab,Canada,Toronto,2012,,year,historical (acquired),,,CORE,confirmed,[S016][S017],Hinton/Krizhevsky/Sutskever; Google acqui-hire 2013,,,,,,,
+G_N065,Carnegie Mellon University,CMU,university,US,Pittsburgh,1900,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S031],Yang Zhilin PhD (Salakhutdinov & Cohen),,,,,,,
+G_N066,Meta Superintelligence Labs,MSL,lab,US,Menlo Park,2025-06,,month,active,G_N022,,CORE,confirmed,[S028][S029],2025 reorg; FAIR persists as sub-team (see U018),,,,,,,
+G_N067,Gemini,,model,US,,,,unknown,active,G_N003,,CORE,confirmed,[S055],Mirror Grid model node; family collapsed to one node (U025); attributes per DOI 10.17605/OSF.IO/YTQS8,search-giant defense,transformer,next-token + RLHF,search-integrated multimodal,English,MMLU/GPQA/LMArena,big-lab pipeline
+G_N068,ChatGPT,GPT series,model,US,,,,unknown,active,G_N004,,CORE,confirmed,[S055],Mirror Grid model node; family collapsed to one node (U025); attributes per DOI 10.17605/OSF.IO/YTQS8,frontier lab,transformer,next-token + RLHF,API-first frontier scaling,English,MMLU/GPQA/LMArena,big-lab pipeline
+G_N069,Claude,,model,US,,,,unknown,active,G_N005,,CORE,confirmed,[S055],Mirror Grid model node; family collapsed to one node (U025); attributes per DOI 10.17605/OSF.IO/YTQS8,safety-oriented research,transformer,next-token + RLHF/Constitutional AI,"safety-focused reasoning, API-first",English,MMLU/GPQA/SWE-bench,big-lab pipeline
+G_N070,Llama,LLaMA,model,US,,,,unknown,active,G_N006,,CORE,confirmed,[S055],Mirror Grid model node; family collapsed to one node (U025); attributes per DOI 10.17605/OSF.IO/YTQS8,open-weight big-tech R&D,transformer,next-token + RLHF,commoditize model layer,English,MMLU/HumanEval,big-lab pipeline
+G_N071,Copilot,,model,US,,,,unknown,active,G_N019,,CORE,confirmed,[S055],Mirror Grid model node; family collapsed to one node (U025); attributes per DOI 10.17605/OSF.IO/YTQS8,enterprise suite,transformer,next-token + RLHF,productivity-suite integration,English,MMLU/HumanEval,big-lab pipeline
+G_N072,Grok,,model,US,,,,unknown,active,G_N007,,CORE,confirmed,[S055],Mirror Grid model node; family collapsed to one node (U025); attributes per DOI 10.17605/OSF.IO/YTQS8,founder-led consumer/social,transformer,next-token + RLHF,real-time/social integration,English,MMLU/LMArena,mixed big-lab pipeline
+G_N073,ERNIE Bot,ERNIE / Wenxin Yiyan,model,China,,,,unknown,active,G_N049,,CORE,confirmed,[S055],Mirror Grid model node; family collapsed to one node (U025); attributes per DOI 10.17605/OSF.IO/YTQS8,search-giant defense,transformer,next-token + RLHF,search-integrated,English (intl brand),MMLU/LMArena,internal corporate pipeline
+G_N074,DeepSeek models,DeepSeek V3/R1,model,China,,,,unknown,active,G_N010,,CORE,confirmed,[S055],Mirror Grid model node; family collapsed to one node (U025); attributes per DOI 10.17605/OSF.IO/YTQS8,"efficiency-focused frontier, open-weight",transformer,next-token + RLHF,open-weight frontier scaling at low cost,English (intl brand),MMLU/GPQA/LMArena,outside standard pipeline (quant)
+G_N075,Kimi,,model,China,,,,unknown,active,G_N012,,CORE,confirmed,[S055],Mirror Grid model node; family collapsed to one node (U025); attributes per DOI 10.17605/OSF.IO/YTQS8,long-context reasoning frontier,transformer,next-token + RLHF,long-context/reasoning consumer,English (intl brand),MMLU/LMArena,Tsinghua-CMU-US-lab pipeline
+G_N076,Qwen,Tongyi Qianwen,model,China,,,,unknown,active,G_N052,,CORE,confirmed,[S055],Mirror Grid model node; family collapsed to one node (U025); attributes per DOI 10.17605/OSF.IO/YTQS8,open-weight big-tech R&D,transformer,next-token + RLHF,"commoditize model layer, drive cloud",English (intl brand),MMLU/HumanEval,internal corporate pipeline
+G_N077,GLM,ChatGLM,model,China,,,,unknown,active,G_N011,,CORE,confirmed,[S055],Mirror Grid model node; family collapsed to one node (U025); attributes per DOI 10.17605/OSF.IO/YTQS8,enterprise + academic,transformer,next-token + RLHF,enterprise integration,English (intl brand),MMLU/LMArena,Tsinghua academic pipeline
+G_N078,MiniMax models,ABAB / MiniMax-01,model,China,,,,unknown,active,G_N013,,CORE,confirmed,[S055],Mirror Grid model node; family collapsed to one node (U025); attributes per DOI 10.17605/OSF.IO/YTQS8,consumer/entertainment,transformer,next-token + RLHF,consumer personality/social,English (intl brand),MMLU/LMArena,domestic pipeline (SenseTime/CAS)
+G_N079,Common Crawl,,corpus,,,2007,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S055],commoncrawl.org web crawl corpus,,,,,,,
+G_N080,Wikipedia,,corpus,,,2001,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S055],encyclopedic corpus,,,,,,,
+G_N081,GitHub (code corpus),,corpus,,,2008,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S055],public code repositories as training data,,,,,,,
+G_N082,arXiv,,corpus,,,1991,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S055],scientific preprint corpus; also epistemic pipeline,,,,,,,
+G_N083,Reddit,,corpus,,,2005,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S055],conversational/web-link corpus (WebText lineage),,,,,,,
+G_N084,The Pile / Books3,Books3; EleutherAI Pile,corpus,,,2020,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S055],aggregate corpus; Books3 subject to litigation,,,,,,,
+G_N085,MMLU,MMLU-Pro family,benchmark,,,2020,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S055],shared evaluation surface (fitness-function layer),,,,,,,
+G_N086,HumanEval,,benchmark,,,2021,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S055],shared evaluation surface (fitness-function layer),,,,,,,
+G_N087,GPQA Diamond,,benchmark,,,2023,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S055],shared evaluation surface (fitness-function layer),,,,,,,
+G_N088,SWE-bench Verified,,benchmark,,,2024,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S055],shared evaluation surface (fitness-function layer),,,,,,,
+G_N089,LMArena,LMSYS Chatbot Arena Elo,benchmark,,,2023,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S055],shared evaluation surface (fitness-function layer),,,,,,,
+G_N090,ARC-AGI-2,,benchmark,,,2024,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S055],shared evaluation surface (fitness-function layer),,,,,,,
+G_N091,Huawei,,compute_provider,China,Shenzhen,1987,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S061],Ascend chip provider to Entity-Listed Chinese labs,,,,,,,
+G_N092,Prosperity7 Ventures,Aramco Ventures Prosperity7,funder,Saudi Arabia,Riyadh,2021,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S064],Saudi Aramco venture arm; cross-border capital into Chinese AI,,,,,,,
+G_N093,Kingdom Holding Company,KHC,funder,Saudi Arabia,Riyadh,1980,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S063],Saudi investor in xAI rounds; cross-border capital,,,,,,,
