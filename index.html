@@ -16,19 +16,21 @@
   html,body{height:100%}
   body{background:var(--bg);color:var(--ink);font:14px/1.5 "Avenir Next","Segoe UI",system-ui,sans-serif;overflow:hidden}
   #app{display:flex;height:100%;width:100%}
-  #graph{flex:1;position:relative}
+  #graph{flex:1;position:relative;display:flex;flex-direction:column}
   svg{width:100%;height:100%;display:block;cursor:grab}
   svg:active{cursor:grabbing}
 
-  header{position:absolute;top:0;left:272px;right:0;padding:14px 18px;pointer-events:none;z-index:5}
+  header{position:static;padding:12px 18px 8px;pointer-events:none}
   header h1{font-size:17px;font-weight:600;letter-spacing:.04em}
   header p{color:var(--dim);font-size:12px;margin-top:2px}
 
-  #controls{position:static;flex:0 0 256px;height:100%;overflow-y:auto;background:var(--panel);
-    border-right:1px solid var(--line);border-radius:0;padding:14px 16px 24px;max-width:none;z-index:auto}
+  #controls{position:static;flex:0 0 272px;height:100%;overflow-y:auto;background:var(--panel);
+    border-right:1px solid var(--line);border-radius:0;padding:18px 18px 28px 20px;max-width:none;z-index:auto}
   #controls h2{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:8px 0 5px}
   #controls h2:first-child{margin-top:0}
-  .tog{display:flex;align-items:center;gap:7px;padding:2px 0;cursor:pointer;user-select:none;font-size:12.5px}
+  .tog{display:flex;align-items:flex-start;gap:8px;padding:4px 2px;cursor:pointer;user-select:none;font-size:12.5px;line-height:1.35}
+  .tog input{margin-top:2px}
+  .tog .swatch{margin-top:6px}
   .tog input{accent-color:#fff;cursor:pointer}
   .swatch{width:16px;height:3px;border-radius:2px;flex:none}
   .swatch.dash{background:repeating-linear-gradient(90deg,currentColor 0 4px,transparent 4px 7px)}
