@@ -67,3 +67,9 @@ No dangling edge references; all derived edges carry primitives; 66 nodes / 117 
 ## v1.3 (2026-08-11) - Paradigm view
 - Spec frozen (paradigm-departure-detector v1.0-FROZEN); 12x4 coding pass executed post-freeze from primary/technical documentation; data/paradigm.csv added (codings, deltas, evidence tiers, d_paradigm).
 - New 'Paradigm' tab: HAS ANYONE MOVED? matrix. Result: 9 CONVENTIONAL, 1 HYBRID (Qwen 3.5, documented 3:1 Gated DeltaNet linear/full attention), 1 SUBSTRATE-DIVERGENT (GLM-5, Ascend, paradigm unchanged), 1 INSUFFICIENT (Copilot/MAI, R unknown). A1 entropy now 0.414 bits - no longer a constant column. T/R/E remain constant across known values. MiniMax 01->M2.5 recorded as documented temporary departure + reconvergence.
+
+## v1.4 (2026-09-14) - verified September update
+- Paradigm re-score under frozen spec v1.0: Kimi K3 -> HYBRID (3:1 KDA:Gated-MLA flagship, arXiv-documented). A1 column now has TWO hybrids (Qwen 3.5, Kimi K3); entropy 0.41 -> 0.65 bits. DeepSeek V4.1-Flash: largest A2 redesign (causal encoder-decoder, CSA2, MIT) with A1 intact. MiniMax flagship-anchor error (M2.5 vs M3, shipped 06-01) logged as U026.
+- New node: Cerebras (G_N094). New edges: Cerebras->OpenAI COMPUTE (reported, U028); DeepSeek->Tencent and DeepSeek->Zhipu RESEARCH_INFLUENCE (DSA method inheritance in Hy4 and GLM-5).
+- Verified but deliberately NOT edges: AMD-Cerebras disaggregated offering (announced/2H2026, U027 watchlist); Tencent Hy4 Apache-2.0 770B release; GLM-5.3; Qwen3.8-27B (family releases, U029).
+- Sources S067-S073 (paradigm P-refs converted to S-refs); uncertainty U026-U029. 94 nodes / 197 edges.

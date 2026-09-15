@@ -92,3 +92,4 @@ G_N090,ARC-AGI-2,,benchmark,,,2024,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[
 G_N091,Huawei,,compute_provider,China,Shenzhen,1987,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S061],Ascend chip provider to Entity-Listed Chinese labs,,,,,,,
 G_N092,Prosperity7 Ventures,Aramco Ventures Prosperity7,funder,Saudi Arabia,Riyadh,2021,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S064],Saudi Aramco venture arm; cross-border capital into Chinese AI,,,,,,,
 G_N093,Kingdom Holding Company,KHC,funder,Saudi Arabia,Riyadh,1980,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S063],Saudi investor in xAI rounds; cross-border capital,,,,,,,
+G_N094,Cerebras,Cerebras Systems,compute_provider,US,Sunnyvale,2016,,year,active,,,STRUCTURAL_SUPPORT,confirmed,[S070],"Wafer-Scale Engine; NASDAQ CBRS; AMD Helios disaggregated-inference partnership (prefill/decode split) announced 2026-07-23, Cerebras Cloud 2H2026",,,,,,,

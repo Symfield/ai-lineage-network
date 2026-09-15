@@ -24,3 +24,7 @@ U022,ALLEGED_DISTILLATION Claude->Kimi and Claude->MiniMax (Feb 2026),[S055][S06
 U023,"Alibaba Cloud / Tencent Cloud hosting of Moonshot, MiniMax, Zhipu",[S055][S065],,reported,5 cloud edges pending primary confirmation
 U024,Prosperity7 -> Zhipu investment amount,[S064],,incomplete,participation confirmed; amount undisclosed; edge unweighted
 U025,"Model families collapsed to single nodes (GPT series, DeepSeek V3/R1, etc.)",[S055],,modeling decision,version-level MODEL_DERIVED_FROM not encoded in v1.2
+U026,2026-08-11 paradigm scoring anchored MiniMax flagship at M2.5; M3 had shipped 2026-06-01,[S068],,scoring correction,"Flagship anchor updated; classification unchanged (A1 MATCH); correction logged, not silently patched"
+U027,"AMD-Cerebras disaggregated inference: announced 2026-07-23, availability 2H2026, economics company-modeled",[S070],,"announced, not demonstrated",No lab-facing edge for the joint offering; watchlist until availability + independent economics
+U028,"Cerebras-OpenAI agreement size (>$10B, Jan 2026)",[S070],,reported,Edge G_E195 at reported; amount not filing-confirmed
+U029,GLM-5.3 and Qwen3.8-27B family continuations (Aug 2026),[S071][S072],,reported,Named in Hy4 comparative documentation; no dedicated primary pass; paradigm-row notes only
